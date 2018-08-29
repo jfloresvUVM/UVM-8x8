@@ -1,4 +1,4 @@
-public without sharing class Ctrl_Torre_de_Control{
+public with sharing class Ctrl_Torre_de_Control{
 
     //Método para obtener lista de campos en la configuración personalizada Campos_Torre_Control__c y asi poder llenar el 
     //picklist de campos en la página de torre de control
@@ -303,11 +303,6 @@ public without sharing class Ctrl_Torre_de_Control{
     public class DatosRetorno_Wrapper{
         public List<Opportunity> lListaOportunidades;
         public String query;
-
-        public DatosRetorno_Wrapper(List<Opportunity> pListaOpps, String pQuery){
-            this.lListaOportunidades = pListaOpps;
-            this.query = pQuery;
-        }
 
         public DatosRetorno_Wrapper(){
             lListaOportunidades = new List<Opportunity>();

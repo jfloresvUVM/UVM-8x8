@@ -205,96 +205,28 @@
 
         //Funcion de ejecucion de query y count()
         $scope.opo = function(){
-                        //Llenando grafico 1
-                        new Chartist.Line('.ct-chart', {
-                          labels: ['M', 'T', 'W', 'T', 'F'],
-                          series: [
-                            [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()],
-                            [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()],
-                            [Math.random(), Math.random(), Math.random(), Math.random(), Math.random()]
-                          ]
-                        }, {
-                          fullWidth: true,
-                          chartPadding: {
-                            right: 40
-                          }
-                        });
+                        //Mapa de claves linea de negocio
+                        var mapaClaves = new Map();
 
-                        //Llenando grafico 2
-                        var data = {
-                          labels: ['A0', 'A1', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
-                          series: [
-                            [Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random()],
-                            [Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random(), Math.random()]
-                          ]
-                        };
+                        //variables utilizadas para llenar el grafico de campus de tipo circulo
+                        var mapaCampus = new Map();
+                        var lListaCampus = [];
+                        var lListaNumero = [];
 
-                        var options = {
-                          seriesBarDistance: 10
-                        };
+                        //variables utilizadas para llenar el grafico de prioridades para primer grafico
+                        var mapaPrioridades = new Map();
+                        var lListaPrioridades = [];
+                        var lListaValorPrioridades = [];
 
-                        var responsiveOptions = [
-                          ['screen and (max-width: 640px)', {
-                            seriesBarDistance: 5,
-                            axisX: {
-                              labelInterpolationFnc: function (value) {
-                                return value[0];
-                              }
-                            }
-                          }]
-                        ];
-                        new Chartist.Bar('.ct-chart2', data, options, responsiveOptions);
-                        //fin de llenado de grafico 2
+                        //variables utilizadas para llenar el grafico de lineas de negocio para segundo grafico
+                        var mapaLN = new Map();
+                        var lListaLN = [];
+                        var lListaLNValores = [];
 
                         //inicio de logica para buscar las oporutnidades
                         console.log('BUSCAR:');
-                        console.log($scope.seleccionados);
+                        console.log(JSON.stringify($scope.seleccionados));
 
-                        //declaracion de variable mapa para llenado de grafico por campus
-                        var mapaCampus = new Object();
-                        mapaCampus['Roma'] = {cantidad:3};
-                        mapaCampus['San Rafael'] = {cantidad:4};
-                        mapaCampus['Lomas Verdes'] = {cantidad:8};
-
-                        //recorriendo el mapa con los datos para el grafico de campus
-                        for(var iCampus = 0; iCampus < mapaCampus.length;iCampus ++){
-                            console.log("entrando al for para campus:::");
-                            console.log(mapaCampus[iCampus]);
-                        }
-
-                        //Llenad del grafico de campus
-                        //Llenando graafico 3
-                        var data = {
-                            labels: ['San Rafael', 'Roma', 'Lomas Verdes','Hispano'],
-                            series: [20, 15, 40,11]
-                        };
-
-                        var options = {
-                            labelInterpolationFnc: function(value) {
-                                return value[0]
-                            }
-                        };
-
-                        var responsiveOptions = [
-                            ['screen and (min-width: 640px)', {
-                                chartPadding: 50,
-                                labelOffset: 50,
-                                labelDirection: 'explode',
-                                labelInterpolationFnc: function(value) {
-                                    return value;
-                                }
-                            }],
-                            ['screen and (min-width: 1024px)', {
-                                labelOffset: 30,
-                                chartPadding: 20
-                            }]
-                        ];
-
-                        new Chartist.Pie('.ct-chart3', data, options, responsiveOptions);
-                        //fin llenado grafico 3
-
-                        console.log("valor del mapa de campus");
-                        console.log(mapaCampus);
 
                         if($scope.seleccionados.length == 0){
                             $scope.alertaVibra('Antes de buscar agrega al menos 1 filtro...');
@@ -321,7 +253,55 @@
                                             console.log("::::::::::::::::");
                                             $('#toportunidad').html('');
                                             if( result.lListaOportunidades.length > 0){ 
-                                                $scope.verTablaOpps = true;                              
+                                                $scope.verTablaOpps = true;
+
+                                                //for para llenar los graficos con todos los registros resultantes
+                                                for(i = 0; i < result.lListaOportunidades.length; i++){
+                                                    console.log("recorriendo for para graficos " + i);
+                                                    //Llenando el mapa para llenar grafico de campus
+                                                    if(mapaCampus.get(result.lListaOportunidades[i].Campus__r.Name) == null){
+                                                        mapaCampus.set(result.lListaOportunidades[i].Campus__r.Name, 1);
+                                                    }else{
+                                                        mapaCampus.set(result.lListaOportunidades[i].Campus__r.Name, mapaCampus.get(result.lListaOportunidades[i].Campus__r.Name) + 1);
+                                                    }
+
+                                                    //llenado del mapa para prioridades primer grafico
+                                                    if(mapaPrioridades.get(result.lListaOportunidades[i].Prioiridad_de_Oportunidad_8x8__c) == null){
+                                                        mapaPrioridades.set(result.lListaOportunidades[i].Prioiridad_de_Oportunidad_8x8__c, 1);
+                                                    }else{
+                                                        mapaPrioridades.set(result.lListaOportunidades[i].Prioiridad_de_Oportunidad_8x8__c, mapaPrioridades.get(result.lListaOportunidades[i].Prioiridad_de_Oportunidad_8x8__c) + 1);
+                                                    }
+
+                                                    //Llenando el mapa para llenar grafico de Linea de negocio
+                                                    if(mapaLN.get(result.lListaOportunidades[i].Nivel__c) == null){
+                                                        mapaLN.set(result.lListaOportunidades[i].Nivel__c, 1);
+                                                    }else{
+                                                        mapaLN.set(result.lListaOportunidades[i].Nivel__c, mapaLN.get(result.lListaOportunidades[i].Nivel__c) + 1);
+                                                    }
+                                                }
+
+                                                //for que llena las listas para alimentar el grafico de campus
+                                                for (var [key, value] of mapaCampus) {
+                                                    lListaCampus.push(key);
+                                                    lListaNumero.push(value);
+                                                }
+
+                                                //for que llena las listas para alimentar el grafico de prioridades
+                                                for (var [key, value] of mapaPrioridades) {
+                                                    lListaPrioridades.push(key);
+                                                    lListaValorPrioridades.push(value);
+                                                }
+
+                                                //for que llena las listas para alimentar el grafico de linea de negocio
+                                                for (var [key, value] of mapaLN) {
+                                                    lListaLN.push(key);
+                                                    lListaLNValores.push(value);
+                                                }
+
+                                                console.log("valor de mapa prioridades");
+                                                console.log(mapaPrioridades);
+
+                                                //for para llenar el preview
                                                 for(i = 0; i < limite; i++){
 
                                                     $('#toportunidad').append(
@@ -390,6 +370,63 @@
                                             }else{
                                                 $scope.verTablaOpps = false;
                                             }
+
+                                            //Llenando grafico 1
+                                            new Chartist.Line('.ct-chart', {
+                                                labels: lListaPrioridades,
+                                                series: [
+                                                    lListaValorPrioridades
+                                                ]
+                                            }, {
+                                                low: 0,
+                                                showArea: true
+                                            });
+                                            //fin llenado grafico 1
+
+                                            //Llenando grafico 2
+                                            new Chartist.Bar('.ct-chart2', {
+                                                labels: lListaLN,
+                                                series: lListaLNValores
+                                            }, {
+                                                distributeSeries: true
+                                            });
+                                            //fin de llenado de grafico 2
+
+                                            //Llenando graafico 3 ( campus )
+                                            var data = {
+                                                labels: lListaCampus,
+                                                series: lListaNumero
+                                            };
+
+                                            var options = {
+                                                labelInterpolationFnc: function(value) {
+                                                    return value[0]
+                                                }
+                                            };
+
+                                            var responsiveOptions = [
+                                                ['screen and (min-width: 640px)', {
+                                                    chartPadding: 50,
+                                                    labelOffset: 50,
+                                                    labelDirection: 'explode',
+                                                    labelInterpolationFnc: function(value) {
+                                                        return value;
+                                                    }
+                                                }],
+                                                ['screen and (min-width: 1024px)', {
+                                                    labelOffset: 40,
+                                                    chartPadding: 20
+                                                }]
+                                            ];
+
+                                            new Chartist.Pie('.ct-chart3', data, options, responsiveOptions);
+                                            //fin llenado grafico 3
+
+                                            //evaluando resultados de los mapas para los graficos
+                                            console.log("valor del mapa ya en for campus");
+                                            console.log(mapaCampus);
+
+
                                             $('#Query').text(result.query);
                                             $scope.query = result.query;
 

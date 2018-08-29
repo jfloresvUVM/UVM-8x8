@@ -1,0 +1,503 @@
+<apex:page cache="false" doctype="html-5.0" showheader="false" controller="Ctrl_Landing_Campus" sidebar="false" standardstylesheets="false" applyBodyTag="false" >
+
+
+<style>
+
+/* New Design */
+
+.jumbotron.jumbotron-fluid {
+  background-color: white;
+      height: 300px;
+      /* -webkit-box-shadow: 0px 3px 12px 0px rgba(0,0,0,0.46);
+      -moz-box-shadow: 0px 3px 12px 0px rgba(0,0,0,0.46);
+      box-shadow: 0px 3px 12px 0px rgba(0,0,0,0.46); */
+      background-image: url('{!URLFOR($Resource.banners, 'banner_2.jpg')}');
+      background-position: bottom;
+      background-size: cover;
+}
+h1.display-4 {
+    font-weight: 400;
+}
+
+select.form-control.jumbo-selector {
+    width: 300px;
+    margin-left: 15px;
+}
+
+.btn-card {
+    width: 100%;
+}
+.jumbo-conainter-content.card {
+    padding-left: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-right: 50px;
+  }
+
+button.btn.btn-info.btn-academic{
+      right: 0;
+      position: absolute;
+      margin-top: -100px;
+      margin-right: 50px;
+  }
+
+  .modal-dialog {
+    max-width: 800px;
+}
+
+h5#solutionsModalLabel {
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-size: 25px;
+    color: #848382;
+}
+
+.modal-body {
+    position: relative;
+    flex: 1 1 auto;
+    color: black;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    padding: 25px;
+}
+
+div#solutionsModalBody >img {
+    max-height: 200px;
+    max-width: 300px;
+    margin: 5px;
+}
+
+div#map-canvas {
+    position: relative;
+    overflow: hidden;
+    /* margin-bottom: 100px; */
+    /* z-index: 999999; */
+    width: 100%;
+    height: 500px;
+}
+
+.alert.alert-warning.alert-dismissible.fade.show {
+    bottom: 0;
+    position: absolute;
+    width: 100%;
+}
+
+.alert span {
+    display: inline;
+    max-width: 89%;
+    margin-left: 5px;
+}
+
+strong.error_label {
+    text-decoration: underline;
+}
+
+@media only screen and (max-width: 500px) {
+
+button.btn.btn-info.btn-academic {
+    right: 0;
+    left: 0;
+    position: relative;
+    margin-top: -24px;
+    margin-right: auto;
+    margin-left: 25%;
+    text-align: center;
+}
+.lead {
+    font-size: 1.15rem;
+    font-weight: 300;
+}
+
+div#solutionsModalBody >img {
+    max-height: 200px;
+    max-width: 245px;
+    margin: unset;
+}
+
+h5#solutionsModalLabel {
+    font-weight: 700;
+    /* letter-spacing: 1px; */
+    font-size: 19px;
+    color: #848382;
+}
+
+
+}
+
+@media only screen and (min-width: 700px) and (max-width: 1024px ){
+
+button.btn.btn-info.btn-academic {
+    right: 0;
+    position: absolute;
+    margin-top: -13px;
+    margin-right: 40px;
+}
+
+}
+
+@media only screen and (min-width: 1024px){
+
+button.btn.btn-info.btn-academic {
+    right: 0;
+    position: absolute;
+    margin-top: -70px;
+    margin-right: 40px;
+}
+
+}
+
+</style>
+
+
+    <head>        
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>        
+        
+
+
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700" rel="stylesheet"/>
+        
+
+        <apex:stylesheet value="{!URLFOR($Resource.MD, 'material-dashboard-html-v2.1.0/assets/css/material-dashboard.css?v=2.1.0.css')}" />
+        <apex:stylesheet value="{!URLFOR($Resource.zipCalculadora,'/ZipCalculadora/css/font-awesome.min.css')}"/>
+         
+
+        <!-- Chartist JS -->
+</head>
+
+<body>
+
+	<!-- Content Begin -->
+
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <div class="col-lg-6 jumbo-conainter-content card">
+      <h1 class="display-4">Campus UVM</h1>
+      <p class="lead">Selecciona un Campus para Mayor informacón..</p>
+      <div  class="row">
+        <select class="form-control jumbo-selector" id="campus_select">
+          <option>Elige una opción</option>
+        </select>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-info btn-academic" onclick="gotoPrograma()" id="button_programas">Programa Academico</button>
+  </div>
+</div>
+
+
+<div class="container">
+  	<div class="row" id= "category_navigation">
+    	<!-- Content of Cards -->
+	</div>
+</div>
+
+
+
+ <!-- Modal -->
+     <div class="modal fade" id="solutionsModal" tabindex="-1" role="dialog" aria-labelledby="solutionsModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="solutionsModalLabel"></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" id="solutionsModalBody">
+              
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+	<!-- Content Ends -->
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+
+<!-- Generar llave de Api Desde google ** -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDmZ03-FQLg1aULLYCWGU_Mt3VjNK1eEzA"
+  type="text/javascript"></script>
+
+    <div class="alert alert-warning alert-dismissible fade" role="alert">
+  		<strong class="error_label">Error:</strong> <span id="alert_msg"></span>
+      		<button type="button" class="close"  aria-label="Close" onclick="$('.alert').hide()">
+        		<span aria-hidden="true">&times;</span>
+      		</button>
+	</div> 
+
+
+<script>
+	//Metodo principal cuando se carga la ventana.
+	window.onload = getRemoteCampus();
+
+
+	//Varianble global para el campus seleccionado
+    var selected_campus;
+
+	  function getRemoteCampus() {
+        //$('.alert').addClass('show');
+
+        //Metodo para llamar obtener todos los Cammpus
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.Ctrl_Landing_Campus.obtenerCampusUvm}',
+                function(result, event){
+                if (event.status) {
+                    //Se agrega las opciones al selector.
+                    for (var i =0; i<result.length; i++){ 
+                        $( "#campus_select" ).append("<option>"+result[i]+"</option>"); 
+                    }
+                   
+                } else if (event.type === 'exception') { 
+                    console.log(event.messsage)
+                   
+                }
+            }
+        );
+    }
+
+</script>
+
+
+<script>
+
+        //Se agrega EventListener para cuando se cambie el campu
+        $( "#campus_select" ).change(function() {
+              //se elimmina cualquier contenido de la vista principal.
+			  $('#main_view').empty();	
+              //Se obtiene el valor del texto
+              selected_campus = $("#campus_select>option:selected").text();
+              console.log(selected_campus);
+              //Llamado al metodo para llenar el menu
+              fill_menu (selected_campus);
+
+		});	
+
+</script>
+
+<script>
+	
+	function fill_menu (campus){
+        //Metodo para llenar el menu dinamicamente.
+        //Uso de Remote Action con el Ctrolador Ctrl_Landing_Campus
+      Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.Ctrl_Landing_Campus.obtenerMenu}',campus,
+                function(result, event){
+                $('#category_navigation').empty();
+
+                if (event.status) {
+				    //Si estatus correcto, se crean los links**
+
+                    console.log("result fill_menu"+result);
+
+                    for (var key in result) {
+
+                        console.log(result[key].MasterLabel);
+                        
+                        	//Variables usadas para muestra de datos.
+       						var icon;
+       						var name;
+       						var color;
+       						var cat = result[key].MasterLabel;
+
+       						if (cat == "Ubicacion y Como llegar"){
+
+       							icon = "<i class='fa fa-street-view'></i>";
+       							cat = "Ubicación";
+       							color ="danger";
+       						}
+
+       						if (cat == "Eventos"){
+
+       							icon = "<i class='fa fa-calendar' aria-hidden='true'></i>";
+       							color = "warning";
+       						}
+
+       						if (cat == "Promociones"){
+
+       							icon = "<i class='fa fa-gift' aria-hidden='true'></i>";
+       							color = "info";
+       						}
+
+       						if (cat == "Mensajes Clave"){
+
+       							icon = "<i class='fa fa-commenting-o' aria-hidden='true'></i>";
+       							color = "success";
+       						}
+
+       						if (cat == "Galeria de Fotos"){
+
+       							icon = "<i class='fa fa-picture-o' aria-hidden='true'></i>";
+       							color = "primary";
+       						}
+
+       						if (cat == "Sociales"){
+
+       							icon = "<i class='fa fa-newspaper-o' aria-hidden='true'></i>";
+       							color = "default";
+       						}
+
+       						var solution = "'name'";
+
+       						//se Agrega el html de la Card con las variables
+
+					var card = "<div class='col-lg-4 col-md-6 col-sm-6'><div class='card card-stats'>"+
+	        					"<div class='card-header card-header-"+color+" card-header-icon'>"+
+	          					"<div class='card-icon'>"+
+	            				icon+
+	          					"</div>"+
+						        "<p class='card-category'>"+selected_campus+"</p>"+
+						        "<h3 class='card-title'>"+cat+
+						        "</h3></div><div class='card-footer'><div class='btn-card'>"+
+						     	"<button onClick='getRemoteSolutions(\""+key+"\",\""+cat+"\")' class='btn btn-"+color+" btn-card'>Ver mas</button>"+
+						        "</div>"+"</div>"+"</div>"+"</div>";
+						    //Se Agrega al html
+						    $('#category_navigation').append(card);
+
+                     } 
+                     //Si no existen categorias, muestra alerta
+                     if(!$(".card-category").get(0)){
+
+    					console.log("Categorias Vacias");
+    					//LLamada Alerta
+    					showAlert("No se Encontraron Cageorias asociadas al campus.");
+						}         
+                   
+                } else if (event.type === 'exception') { 
+                    //log para las exceptiones
+
+                    console.log(event.messsage)
+                   
+                }
+            }
+        );
+
+    }
+
+
+
+</script>
+
+
+<script>
+    function getRemoteSolutions(categoria_id,categoria_name) {
+            //Metodo para obtener Soluciones desde CTRL
+        	console.log("Remote Solutions: "+categoria_id + " " + selected_campus);
+            //Obtener Soluciones desde CTRL
+    	   Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.Ctrl_Landing_Campus.obtenerSoluciones}',categoria_id,selected_campus,
+                function(result, event){
+                console.log(result)	
+                if (event.status) {
+                    //Se parsea elemento String -> HTML
+                  var parser = new DOMParser; // new parser
+				  var dom = parser.parseFromString(
+    	 			'<!doctype html><body>' + result[1],
+    	 			'text/html'); // Se parsea un String a HTML
+
+					 var decodedString = dom.body.textContent; //Se Obtiene el Body del DOM
+
+					 console.log(decodedString);
+                    //Se vacia la vista principal y se agrega el nuevo Body
+
+                    $("#solutionsModalLabel").text(categoria_name+" "+selected_campus);
+
+                    $("#solutionsModalBody").empty();
+                    
+                    $("#solutionsModalBody").append(decodedString);
+
+                    $("#solutionsModal").modal();
+
+                    //Ubicacion Categoria Poner mapa Google
+                     if (categoria_id == '02n2F0000004HKYQA2'){
+                         if (result[2]!="missing"){
+                            setGMap(result[0],result[2],result[3]); //Mandar Latitud y Longitud
+                         }else{
+                            showAlert("No se encuentras las coordenadas.")
+                         }
+                     }
+                   
+                } else if (event.type === 'exception') {
+                    console.log(event.messsage)
+                   
+                }
+            }
+        );
+    }
+    
+    </script>
+
+<script>
+        
+    function setGMap(name,lat,lon){
+
+
+        console.log ("Insert Google Maps");
+
+        //Se Agrega dinamicamente el mapa
+    
+         $('#solutionsModalBody').append("<div id='map-canvas'></div>");
+
+
+    var latlng = new google.maps.LatLng(lat, lon);  //define la ubicacion del mapa     
+    var geocoder= new google.maps.Geocoder();	//Instancia de GeoCoder Google
+        var Options={	
+            zoom:17,		//zoom del mapa
+            center: latlng, //se muestra en el centro LAt Lon.
+            mapTypeControl: true,	//Habilita controles
+            zoomControl: true,		//Habilita Zoom
+            zoomControlOptions: {	
+            position: google.maps.ControlPosition.RIGHT_TOP
+        },
+            scaleControl: true,			//Se Habilita Escala	
+            streetViewControl: true,	//Se habilita Street View
+            streetViewControlOptions: {
+            position: google.maps.ControlPosition.LEFT_TOP
+        }  
+    };
+    //Se asigna mapa al div y se inicializa
+    map = new google.maps.Map($('#map-canvas')[0], Options);  //notice, its $ not j$.
+    //Se agrega un marcador al mapa
+var marker = new google.maps.Marker({
+    position: latlng,
+    map: map,
+    title: name
+  });
+
+    }
+    </script>
+
+    <script>
+        
+	    function showAlert(message){
+	    //Funcion para Mostrar una Alerta usando message como parametro	
+	     $('.alert').addClass("show");
+	     $('.alert').show();
+	     $('#alert_msg').text(message);
+
+
+	    }
+
+	    function gotoPrograma(){
+	    	//Ir a link de programa Academico
+	    	if ((selected_campus != "Elige una opción" )||(selected_campus != null ) ){
+
+	    	window.location.href = '/apex/landing_programas_academico?campus='+selected_campus;
+
+	    	}
+
+	    }
+
+
+    </script>
+
+</body>
+
+    
+    
+</apex:page>

@@ -1,0 +1,182 @@
+<apex:page cache="false" doctype="html-5.0" showheader="false" controller="Ctrl_Landing_Academico" sidebar="false" standardstylesheets="false" applyBodyTag="false" >
+    <head>        
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>        
+        <apex:stylesheet value="{!URLFOR($Resource.zipCalculadora,'/ZipCalculadora/css/font-awesome.min.css')}"/>
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css"/>
+        <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        <apex:stylesheet value="{!URLFOR($Resource.MD, 'material-dashboard-html-v2.1.0/assets/css/material-dashboard.css?v=2.1.0.css')}" />
+    </head>
+
+<style>
+body {
+    background-color: #6b6b6b0d;
+    margin: 0;
+    padding: 0;
+}
+button {
+    font-size: 40px;
+}
+.niveles {
+    animation-name: fadeIn;
+    animation-duration: 1.5s;
+}
+
+</style>  
+
+<body>
+  <div class="card-body main_card">
+          <div class="card">
+            <div class="card-header card-header-danger">
+                <h4 class="card-title">Programas académicos</h4>
+                <select id="programa_select" onchange="myFunction(this)" class = "form-control" style="max-width:200px;">
+                    <option>-- Campus --</option>
+                </select>
+            </div>
+            <div class="card-body main_card" id="main_view">
+                <div class="container niveles">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="card" style="width: 22rem;">
+                              <img class="card-img-top" src="https://www.universidaduvm.mx/documents/20700/159731/banner_programas_academicos_1280x440.jpg/76fcfb53-c5e1-4aa4-a5ec-f23ec785668a?t=1488927545000 "/>
+                              <div class="card-body">
+                                <h5 class="card-title">Preparatoria</h5>
+                              </div>
+                              <div class="card-body">
+                                <button type="button" class="btn btn-danger">Programa</button>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card" style="width: 22rem;">
+                              <img class="card-img-top" src="https://www.universidaduvm.mx/documents/20700/159731/home+licenciatura_608x209.jpg/15594345-2b46-48f6-98fc-a815b6642874?t=1483165363000"/>
+                              <div class="card-body">
+                                <h5 class="card-title">Licenciatura</h5>
+                              </div>
+                              <div class="card-body">
+                                <button type="button" class="btn btn-danger">Programa</button>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card" style="width: 22rem;">
+                              <img class="card-img-top" src="https://www.universidaduvm.mx/documents/20700/159731/homeLX_online_608x209.jpg/7cc39d82-4fa9-41d2-9b47-0ed5d41660ba?t=1483165364000"/>
+                              <div class="card-body">
+                                <h5 class="card-title">Licenciatura Ejecutiva</h5>
+                              </div>
+                              <div class="card-body">
+                                <button type="button" class="btn btn-danger">Programa</button>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card" style="width: 22rem;">
+                              <img class="card-img-top" src="https://www.universidaduvm.mx/documents/20700/159754/homePG_presencial_1280x440.jpg/b018722b-0233-4b46-af27-051a2f17f1a4?t=1483165396000"/>
+                              <div class="card-body">
+                                <h5 class="card-title">Posgrado</h5>
+                              </div>
+                              <div class="card-body">
+                                <button type="button" class="btn btn-danger">Programa</button>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card" style="width: 22rem;">
+                              <img class="card-img-top" src="https://www.universidaduvm.mx/documents/20700/159731/homePG_online_608x209.jpg/7c09662a-dd0d-43ab-8c22-f9bc36ac9a76?t=1483165364000"/>
+                              <div class="card-body">
+                                <h5 class="card-title">Online Posgrado</h5>
+                              </div>
+                              <div class="card-body">
+                                <button type="button" class="btn btn-danger">Programa</button>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card" style="width: 22rem;">
+                              <img class="card-img-top" src="https://www.universidaduvm.mx/documents/20700/47029/CAMPUS_UVM_Puebla.jpg"/>
+                              <div class="card-body">
+                                <h5 class="card-title">Online LX</h5>
+                              </div>
+                              <div class="card-body">
+                                <button type="button" class="btn btn-danger">Programa</button>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="card" style="width: 22rem;">
+                              <img class="card-img-top" src="https://www.universidaduvm.mx/documents/20700/159731/tsu_mantenimiento_industrial_automotriz_banner_608x209.jpg/75f827af-daa8-40ba-ba7c-972cafd2de90?t=1484019462000"/>
+                              <div class="card-body">
+                                <h5 class="card-title">Téncnico Superior</h5>
+                              </div>
+                              <div class="card-body">
+                                <button type="button" class="btn btn-danger">Programa</button>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End dinamic main view  -->
+          </div>
+        <!-- End main card body -->
+        </div>
+  <!--End Card  -->    
+</body>
+
+<!-- JQuery -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+function getRemoteCampus(){
+ // Metodo para llamar obtener todos los Cammpus
+    Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.Ctrl_Landing_Academico.obtenerProgramasAcademicos}',
+            function(result, event){
+            if (event.status) {
+                //Se agrega las opciones al selector.
+                for (var i = 0; i < result.length; i ++){ 
+                    $( "#programa_select").append("<option>"+result[i]+"</option>"); 
+                }
+            } else if (event.type === 'exception') { 
+                console.log(event.messsage)
+            }
+        }
+    );
+}
+
+function getRemoteProgramas() {
+    // Metodo para llamar obtener todos los Cammpus
+    Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.Ctrl_Landing_Academico.obtenerCampus}',
+            function(result, event){
+            if (event.status) {
+                //Se agrega las opciones al selector.
+                for (var i = 0; i < result.length; i ++){ 
+                    $( "#programa_select").append("<option>"+result[i]+"</option>"); 
+                }
+            } else if (event.type === 'exception') { 
+                console.log(event.messsage)
+            }
+        }
+    );
+}
+
+function myFunction(selTag) {
+    var x = selTag.options[selTag.selectedIndex].text;
+    console.log(x);
+}
+
+// Carga de metodo => getRemotePrograma
+window.onload = getRemoteProgramas();
+
+</script>
+
+<!-- Control events -->
+<script type="text/javascript"></script>
+
+</apex:page>

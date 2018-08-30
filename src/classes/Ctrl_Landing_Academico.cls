@@ -13,37 +13,41 @@ public with sharing class Ctrl_Landing_Academico {
 				// Asignación de programas a varible => a
 				nombre_programa.add(a.Busqueda_programa__c);
 			}
-			// Manadamos => nombre_programa lleno.
+			// Regreamos => nombre_programa lleno.
 			return nombre_programa;
 		} // fin => obtenerProgramasAcademicos().
-		 
-		@RemoteAction
-		public static List<AggregateResult> obtenerCampus(){
-			// Query para obtener Campus
-			List<AggregateResult> campus_uvm = [SELECT Campus__c ,Campus__r.Name FROM Programa_del_Campus__c WHERE Programa_Activo__c = true  GROUP BY Campus__c, Campus__r.Name];
+	 
+	 @RemoteAction
+	 public static List<String> obtenerCampus() {
+	 	// Crear una lista para almacenar campus con programas activos.
+	 	List<String> nombre_campus = new List<String>();
 
-			// Crear una lista para alamacenar campus
-			List<String> nombre_campus = new List<String>();
+	 	// Iteramos Query de programas activos para cada campus
+		for(AggregateResult ar:[SELECT Campus__c, Campus__r.Name FROM Programa_del_Campus__c WHERE Programa_Activo__c = true  GROUP BY Campus__c, Campus__r.Name]){
+					// Parsemaos AggregateResult a tipo string => campus
+          String campus = String.valueOf(ar.get('Name'));
+					// Asignación de campus a varible => nombre_campus
+          nombre_campus.add(campus);
+    }	
+	 	// Regresamos => nombre_campus lleno.
+    return nombre_campus;
+	} // fin => obtenerCampusUvm().
 
-			// Iteración de => campus_uvm
-			for (AggregateResult a: campus_uvm){
-				// Asignación de campus a variable => a
-				nombre_campus.add(a.Campus__r.Name);
-			}
-			// Mondamos nombre_campus lleno.
-			return nombre_campus;
-		} // fin => obtenerCampusUvm().
+	@RemoteAction
+	public static List<String> obtenerNivelesCampus(String parametro_campus) {
+	 	// Crear una lista para almacenar campus con programas activos.
+	 	List<String> tipo_niveles = new List<String>();
 
-	//@RemoteAction
-	//public static List<String> obtenerNivelesPorCampus() {
-	//	List<Programa_del_Campus__c> niveles_campus = [SELECT Programa__r.Family FROM Programa_del_Campus__c  WHERE Programa_Activo__c = true and Campus__c = '0012F00000JeyC1QAJ' GROUP BY Programa__r.Family];
-    
- //   List<String> tipo_nivel = new List<String>();
+	 	// Iteramos Query de programas activos para cada campus
+		for(AggregateResult er:[SELECT Programa__r.Family FROM Programa_del_Campus__c Where Programa_Activo__c = true AND Campus__r.Name = :parametro_campus GROUP BY Programa__r.Family]){
+					// Parsemaos AggregateResult a tipo string => campus
+          String niveles = String.valueOf(er.get('Family'));
+					// Asignación de campus a varible => nombre_campus
+          tipo_niveles.add(niveles);
+    }	
+	 	// Regresamos => nombre_campus lleno.
+    return tipo_niveles;
 
- //   for (Programa_del_Campus__c a: niveles_campus) {
- //   	tipo_nivel.add(a.Programa__r.Family);
- //   }
- //   return tipo_nivel;
-
-	//}
+	}
 }
+

@@ -13,7 +13,7 @@
 
 <style>
 body {
-    background-color: #6b6b6b0d;
+    background-color: rgb(51,51,51);
     margin: 0;
     padding: 0;
 }
@@ -24,23 +24,43 @@ button.btn.btn-danger {
 .niveles {
     animation-name: fadeIn;
 }
+ul.seccion-verticales > li{
+    padding: 15px; 
+    list-style: none;  
+    display: inline-block;
+}
+ul.seccion-verticales > li > a > span{
+    padding: 15px; 
+    font-size: 14px;
+    font-weight: bold;
+}
+.niveles {
+    text-align: left;
+    display: none;
+}
+.verticales {
+    display: none;
+}
 </style>    
 
 <body onload="getOnloadFunctions()">
     <div class="card-body main_card">
-          <div class="card">
+          <div class="card" style="background-color: rgb(238,238,238);">
             <div class="card-header card-header-danger">
-                <h4 class="card-title">Programas académicos</h4>
+                <h3 class="card-title">Programas Académicos</h3>
                 <select id="campus_select" onchange="getTagValue(this)" class = "form-control" style="max-width:200px;"></select>
-                <select id="tipo_vertical" onchange="getTagValue(this)" class = "form-control" style="max-width:200px;"></select>
+                <!-- <select id="tipo_vertical" class = "form-control" style="max-width:200px;"></select> -->
             </div>
             <div class="card-body main_card" id="main_view">
                 <div class="container">
                     <center>
+                        <h3 class="niveles">Niveles</h3>
                         <div id="tipos_niveles" class="row">
                             <!-- Sección dinámica desde => getRemoteNiveles() -->
                         </div>
                     </center>
+                <h3 class="verticales">Verticales</h3>
+                <ul id="tipo_vertical" class="seccion-verticales"></ul>
                 </div>
             <!-- End dinamic main view  -->
             </div>
@@ -64,7 +84,7 @@ function getOnloadFunctions() {
     window.onload = comprobarCampus();
 }
 
-//Sección: Función principal
+//Sección: Función principal.
 
 function comprobarCampus(){
     // Declaramos => getUrlParameter para obtener parametro enviado desde page(landing_Campus2).
@@ -100,11 +120,20 @@ campus = getUrlParameter('campus');
         getRemoteVerticales(nivel);
     }
 }
+// Recibimos seleción del selector de forma manual.
+function getTagValue(selTag) {
+    var campus_manual = selTag.options[selTag.selectedIndex].text;
+    // Envíamos como parámetro a => getRemoteNiveles() la selección manual.
+    var nivel = selTag.options[selTag.selectedIndex].text;
+    getRemoteNiveles(campus_manual);
+    getRemoteVerticales(nivel);
+    campus = campus_manual; 
+}
 
-// Sección: Campus
+// Sección: Campus.
 
 function getRemoteCampus() {
-    // Metodo para llamar obtener todos los Campus
+    // Metodo para obtener todos los Campus.
     Visualforce.remoting.Manager.invokeAction(
         '{!$RemoteAction.Ctrl_Landing_Academico.obtenerCampus}',
             function(result, event) {
@@ -122,7 +151,6 @@ function getRemoteCampus() {
 
 // Sección: Niveles
 
-
 function getRemoteNiveles(campus) {
     $( "#tipos_niveles").empty(); 
     // Metodo para llamar obtener todos los Campus
@@ -130,6 +158,7 @@ function getRemoteNiveles(campus) {
         '{!$RemoteAction.Ctrl_Landing_Academico.obtenerNivelesCampus}', campus,
             function(result, event){
             if (event.status) {
+                $( ".niveles").show(); 
                 // Iteramos lista y agregamos niveles de modo dinámico.
                 for (var i = 0; i < result.length; i ++) { 
                     // Condicionamos el resultado de nuestro cilclo para asignar imágenes dinámicas a niveles.
@@ -159,15 +188,6 @@ function getRemoteNiveles(campus) {
     );
 }
 
-// Recibimos seleción del selector de forma manual.
-function getTagValue(selTag) {
-    var campus_manual = selTag.options[selTag.selectedIndex].text;
-    // Envíamos como parámetro a => getRemoteNiveles() la selección manual.
-    var nivel = selTag.options[selTag.selectedIndex].text;
-    getRemoteNiveles(campus_manual);
-    getRemoteVerticales(nivel);
-    campus = campus_manual; 
-}
 
 // Sección: Vertical
 
@@ -178,10 +198,11 @@ function getRemoteVerticales(nivel) {
         '{!$RemoteAction.Ctrl_Landing_Academico.obtenerVerticalNivel}', campus, nivel,
             function(result, event){
             if (event.status) {
+                $( ".verticales").show(); 
                 // Iteramos lista y agregamos a etiqueta => <select id="programa_select">
                 for (var i = 0; i < result.length; i ++) { 
-                    $( "#tipo_vertical").append("<option>"+result[i]+"</option>"); 
-                    console.log('Dentro de verticlaes');
+                    // $( "#tipo_vertical").append("<li><span class='animated fadeIn badge badge-pill badge-danger'>" + result[i] + "</span></li>"); 
+                    $( "#tipo_vertical").append("<li><a href='#'><span class='animated fadeIn badge badge-pill badge-secondary'>" + result[i] + "</span></a></li>"); 
                 }
             } else if (event.type === 'exception') { 
                 console.log(event.messsage)

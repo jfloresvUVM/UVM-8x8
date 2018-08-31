@@ -70,4 +70,3 @@ public with sharing class Ctrl_Landing_Academico {
 		return tipo_vertical;
 	}
 }
-

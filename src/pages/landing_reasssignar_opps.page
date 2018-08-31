@@ -1,0 +1,340 @@
+<apex:page cache="false"  doctype="html-5.0" showheader="false" sidebar="false" standardstylesheets="false" applyBodyTag="false" >
+<style>
+.final_percent{
+      text-align: right;
+      position: absolute;
+      right: 0;
+      margin-right: 100px;
+      font-size: 51px;
+      margin-top: -33px;
+      opacity: 0.7;
+}
+
+.jumbotron.jumbotron-fluid {
+  background-color: white;
+      height: 300px;
+      /* -webkit-box-shadow: 0px 3px 12px 0px rgba(0,0,0,0.46);
+      -moz-box-shadow: 0px 3px 12px 0px rgba(0,0,0,0.46);
+      box-shadow: 0px 3px 12px 0px rgba(0,0,0,0.46); */
+      background-image: url('{!URLFOR($Resource.banners, 'banner_2.jpg')}');
+      background-position: bottom;
+      background-size: cover;
+}
+h1.display-4 {
+    font-weight: 400;
+}
+
+select.form-control.jumbo-selector {
+    width: 300px;
+    margin-left: 15px;
+}
+
+.buttons-header {
+    right: 0;
+    position: relative;
+    text-align: right;
+    margin-top: -60px;
+}
+
+.jumbo-conainter-content.card {
+    padding-left: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-right: 50px;
+  }
+
+  .csbox {
+    margin-top: -10px!important;
+    margin-left: -5px!important;
+}
+
+.csbox_main{
+  margin-top: -10px!important;
+  margin-left: -5px!important;
+
+}
+
+span.percent_symbol {
+    right: 0;
+    position: absolute;
+    font-size: 50px;
+    opacity: 0.7;
+    margin-top: -34px;
+    margin-right: 59px;
+    font-weight: 800;
+}
+
+</style>
+    
+    <head>        
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>        
+        
+
+
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700" rel="stylesheet"/>
+        
+
+        <apex:stylesheet value="{!URLFOR($Resource.MD, 'material-dashboard-html-v2.1.0/assets/css/material-dashboard.css?v=2.1.0.css')}" />
+        <apex:stylesheet value="{!URLFOR($Resource.zipCalculadora,'/ZipCalculadora/css/font-awesome.min.css')}"/>
+         
+
+        <!-- Chartist JS -->
+</head>
+
+    
+    <body>
+        
+          <!-- your content here -->
+    <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <div class="col-lg-6 jumbo-conainter-content card">
+        <h1 class="display-4">Asignación</h1>
+        <p class="lead">Selecciona un Campus</p>
+        <div  class="row">
+          <select class="form-control jumbo-selector">
+            <option>Elige una opción</option>
+          </select>
+        </div>
+      </div>
+      <div class="buttons-header">
+        <button type="submit" class="btn btn-primary btn-academic" onclick="equal_assign()">Asignar Equitativo</button>
+        <button type="submit" class="btn btn-info btn-academic" onclick="remove_opps()">Desasignar</button>
+      </div>
+    </div>
+    </div>
+      <!-- End Navbar -->
+      <div class="content">
+          <div class="col-lg-11 col-md-12 mx-auto">
+            <div class="card">
+              <div class="card-header card-header-primary">
+                <h4 class="card-title">Opportunidades para asignar <span id="opp_asignar_gerente"></span></h4>
+                <p class="card-category">Seleccione un porcentaje</p>
+                <span class='final_percent' id="main_percent">100</span><span class="percent_symbol">%</span>
+              </div>
+              <div class="card-body table-responsive">
+                <table class="table table-hover">
+                  <thead class="text-warning">
+                      <th><input type="checkbox" class="form-check-input csbox_main" id="main_check" onClick="fill_all_checks()" value="Bike"/></th>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Estado</th>
+                    <th>Oportunidades</th>
+                    <th>Porcentaje</th>
+                  </thead>
+                  <tbody id="data-table">
+                      <!--Add the Data Rows  -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <button type="button" class="btn btn-success">Confirmar</button>
+
+          </div>
+          <!--End Table  -->
+
+        </div>
+        
+        
+      <!-- Content Ends -->
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+  
+        
+  
+<script>
+
+var opp_gerente =3513;
+var obj_size =0;
+var obj_size_active = 0;
+var porcentaje_gerente = 100;
+  //Test data Object Agent
+var agents =[
+{id:"0000830048f", name:"Rubie Almeida", status:"activo",opp:456},
+{id:"0000830048f", name:"Maritza Ackles", status:"activo",opp:2423},
+{id:"0000830048f", name:"Verdell Key", status:"inactivo",opp:6345},
+{id:"0000830048f", name:"Dorene Nehls", status:"activo",opp:2145},
+{id:"0000830048f", name:"Ludivina Selders", status:"activo",opp:6343},
+{id:"0000830048f", name:"Maritza Ackles", status:"inactivo",opp:2423},
+{id:"0000830048f", name:"Mario Navigation", status:"activo",opp:2423}
+
+];
+
+$("#opp_asignar_gerente").text(opp_gerente);
+
+
+</script>
+
+
+<script>
+
+function fill_agents(){
+//VF Remote Simulations
+$("#data-table").empty();
+console.log("Fill_Agentes:");
+
+obj_size =0;
+
+  for (var key in agents){
+
+    var status_list = agents[key].status;
+
+    var table = "<tr><td><input type='checkbox' class='form-check-input csbox' value ='"+key+"'></td>"+
+                "<td>"+agents[key].id+"</td>"+
+                "<td>"+agents[key].name+"</td>";
+
+                if (status_list == "activo"){
+                  // console.log(agents[key].name+" esta activo");
+
+                  obj_size_active = obj_size_active + 1
+                  table = table+"<td>"+agents[key].status+"</td>";
+
+                }else {
+
+                    table = table+"<td style='color:red;'>"+agents[key].status+"</td>";
+                }
+
+
+                table = table+"<td class='opp_count_table'>"+agents[key].opp+"</td>"+
+                "<td><input type='number' class='form-control input-quantity' onchange='updatePercent(this.value)'></td></tr>";
+
+                obj_size=obj_size+1;
+
+
+                // console.log(status_list);
+
+
+               $("#data-table").append(table);
+
+  }
+}
+
+
+</script>
+
+
+<script>
+function remove_this_opps(id){
+
+  opp_gerente = opp_gerente + parseInt(agents[id].opp);
+  agents[id].opp = 0;
+
+}
+</script>
+
+<script>
+function fill_all_checks(){
+
+  var checkedValue = null;
+  var inputElements = document.getElementsByClassName('csbox');
+  for(var i=0; inputElements[i]; ++i){
+        if(inputElements[i].checked){
+
+          inputElements[i].checked=false;
+
+      }else{
+
+        inputElements[i].checked=true;
+      }
+
+
+  }
+
+}
+
+</script>
+
+<script>
+
+function equal_assign(){
+
+
+  console.log(obj_size);
+  console.log("active: size"+obj_size_active);
+
+  var opps_to_assign = parseInt(opp_gerente/obj_size_active);
+  console.log("Por asignar individual:"+opps_to_assign);
+
+  var opps_m = opps_to_assign*obj_size_active;
+  console.log(opps_m);
+
+  var opps_left =0;
+
+  if (opp_gerente != (opps_m)){
+
+      opps_left = opp_gerente - (opps_m);
+      console.log("Faltantan "+opps_left+" para asignar total:"+opps_m);
+  }
+
+  for (var key in agents){
+
+    if (agents[key].status == "activo"){
+
+      // console.log("For Agents");
+      var sum =  agents[key].opp + opps_to_assign;
+      // console.log("Previo:"+agents[key].opp);
+      agents[key].opp = sum;
+      // console.log("posterior:"+ agents[key].opp);
+
+    }
+
+  }
+  console.log( "Debuggeando variable"+agents[obj_size-1].name);
+  agents[obj_size-1].opp = agents[obj_size-1].opp + opps_left;
+  console.log("opp Gerente= "+ parseInt((opps_to_assign*obj_size_active)+opps_left));
+  opp_gerente= opp_gerente - parseInt((opps_to_assign*obj_size_active)+opps_left);
+  $("#opp_asignar_gerente").text(opp_gerente);
+
+  fill_agents();
+
+}
+
+</script>
+
+<script>
+function remove_opps(){
+
+  var checkedValue = null;
+  var mainCheckbox = document.getElementById('main_check');
+
+  var inputElements = document.getElementsByClassName('csbox');
+  for(var i=0; inputElements[i]; ++i){
+        if(inputElements[i].checked){
+             //checkedValue = inputElements[i].value;
+             console.log("Remove opps:"+inputElements[i].value);
+             remove_this_opps(inputElements[i].value);
+        }
+  }
+
+  $("#opp_asignar_gerente").text(opp_gerente);
+  mainCheckbox.checked = false;
+  fill_agents();
+
+}
+
+</script>
+
+
+<script>
+
+function updatePercent(porcentaje){
+
+  if (porcentaje <= porcentaje_gerente){
+      porcentaje_gerente = porcentaje_gerente - porcentaje;
+  }
+
+  $("#main_percent").text(porcentaje_gerente);
+
+
+}
+</script>
+
+
+<script type="text/javascript">
+  window.onload = fill_agents();
+</script>      
+        
+    </body>
+</apex:page>

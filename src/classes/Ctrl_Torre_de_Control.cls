@@ -1,3 +1,16 @@
+/*---------------------------------------------------------------------------------------------------------
+
+Autor: Javier Flores - 13-08-2018
+Descripción: Clase de apex donde se encuentra la lógica de la obtencion de datos y creacion de query para obtener
+             oportunidades y crear los miembros de campaña.
+
+Datos adicionales: La clase se declaro with sharing para que el usuario no pueda crear miembros de campaña a
+                    registros a los cuales no tenga visibilidad y tenga permisos de ver o modificar
+
+Modificado: Javier Flores - 30-08-2018
+
+Test Class: Torre_De_Control_Test
+---------------------------------------------------------------------------------------------------------*/
 public with sharing class Ctrl_Torre_de_Control{
 
     //Método para obtener lista de campos en la configuración personalizada Campos_Torre_Control__c y asi poder llenar el 
@@ -26,7 +39,7 @@ public with sharing class Ctrl_Torre_de_Control{
 
     //Método donde se armara el super query para la busqueda de oportunidades
     @RemoteAction
-    public static DatosRetorno_Wrapper hacerSuperQuery(String pListafiltros){        
+    public static DatosRetorno_Wrapper hacerSuperQuery(String pListafiltros, String pTipoCampania){
         //variable que agrupa los resultados del método
         DatosRetorno_Wrapper result = new DatosRetorno_Wrapper();
         //oportunidades encontradas
@@ -39,12 +52,16 @@ public with sharing class Ctrl_Torre_de_Control{
         q = 'Select Id ,Nivel__c,Name,Campus__r.Name,Team_8x8__c,tipo_de_team_8x8__c,Prioiridad_de_Oportunidad_8x8__c, '+
         'Score_1_8x8__c,Score_2_8x8__c,Intentos_Campa_a_8x8__c,Contador_de_toques__c,Origen_Actual_8x8__c,Canal_Actual_8x8__c,'+
         'Tipo_de_Base__c,Nivel_de_Inter_s__c,Campa_a_CEC_Actual__c,SubCampa_a_8x8__c,Ultimo_Toque_Call_Center__c ' + 
-        'from Opportunity where Campa_a_CEC_Actual__r.id = null AND Miembro_de_Campa_a_CEC__r.id = null '+
-        'AND Owner.ProfileId = \''+lIdPerfiles+'\'';
+        'from Opportunity where Owner.ProfileId = \''+lIdPerfiles+'\'';
         //variable donde se guardaran cada uno de los filtros
         List<TorreControlFiltros> datosFiltros = new List<TorreControlFiltros>();
         //deserializacion de los filtros en un objeto de salesforce para mejor manejo
         datosFiltros = TorreControlFiltros.parse(pListafiltros);
+
+        //Agregando filtro dependiendo si el tipo de campaña es especial o no
+        if(pTipoCampania != 'Especial'){
+            q += ' and Campa_a_CEC_Actual__r.id = null AND Miembro_de_Campa_a_CEC__r.id = null';
+        }
 
         //valida si hay filtros en la lista
         if(!datosFiltros.isEmpty()){
@@ -89,6 +106,8 @@ public with sharing class Ctrl_Torre_de_Control{
         List<String> lListaEstatus = new List<String>();
         List<String> lListaInsPresExamen = new List<String>();
         List<String> lListaRevalidaEquiv = new List<String>();
+        List<String> lListaOrigenActual = new List<String>();
+        List<String> lListaCanalActual = new List<String>();
         //query a los campus - id__c es indexado y el costo del query es menor a 0
         for(Account nombreCampus: [select id,Name from account where id__c != null and recordtype.developername = 'Campus_UVM' and Name!='Corporativo UVM']){
             lListaCampus.add(nombreCampus.Name);
@@ -150,6 +169,20 @@ public with sharing class Ctrl_Torre_de_Control{
             lListaOrigenes.add(pickListVal.getLabel());
         }
 
+        //Obtener valores de origen acutla
+        Schema.DescribeFieldResult fieldResultOrigenActual = Opportunity.Origen__c.getDescribe();
+        List<Schema.PicklistEntry> pleOrigenActual = fieldResultOrigenActual.getPicklistValues();
+        for( Schema.PicklistEntry pickListVal : pleOrigenActual){
+            lListaOrigenActual.add(pickListVal.getLabel());
+        }
+
+        //Obtener valores de canal actual
+        Schema.DescribeFieldResult fieldResultCanalActual = Opportunity.Origen__c.getDescribe();
+        List<Schema.PicklistEntry> pleCanalActual= fieldResultCanalActual.getPicklistValues();
+        for( Schema.PicklistEntry pickListVal : pleCanalActual){
+            lListaCanalActual.add(pickListVal.getLabel());
+        }
+
         //Obtener valores de tipo de base
         Schema.DescribeFieldResult fieldResultTipobase = Opportunity.Tipo_de_Base__c.getDescribe();
         List<Schema.PicklistEntry> pleTipoBase = fieldResultTipobase.getPicklistValues();
@@ -207,6 +240,8 @@ public with sharing class Ctrl_Torre_de_Control{
         mapaResultdo.put('Estatus__c', lListaEstatus);
         mapaResultdo.put('Institucion_Presenta_Examen__c', lListaInsPresExamen);
         mapaResultdo.put('Revalidaci_n_Equivalencias_HB__c', lListaRevalidaEquiv);
+        mapaResultdo.put('Canal_Actual_8x8__c', lListaOrigenActual);
+        mapaResultdo.put('Origen_Actual_8x8__c', lListaCanalActual);
 
         return mapaResultdo;
     }

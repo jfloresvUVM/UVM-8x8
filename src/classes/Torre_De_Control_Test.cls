@@ -1,3 +1,11 @@
+/*---------------------------------------------------------------------------------------------------------
+
+Autor: Javier Flores - 29-08-2018
+Descripción: Clase test para probar funcionalidad de torre de control
+
+Modificado: Javier Flores - 30-08-2018
+
+---------------------------------------------------------------------------------------------------------*/
 @isTest
 public class Torre_De_Control_Test {
     

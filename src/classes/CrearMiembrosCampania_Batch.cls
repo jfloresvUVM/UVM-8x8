@@ -1,5 +1,16 @@
-global class CrearMiembrosCampania_Batch implements Database.Batchable<sObject>{
+/*---------------------------------------------------------------------------------------------------------
 
+Autor: Javier Flores - 15-08-2018
+Descripción: Clase de tipo batch para crear los miembros de campaña por lotes que son enviados por la torre de control
+
+Datos adicionales: Los lotes se procesan actualmente de 100 en 100
+
+Modificado: Javier Flores - 30-08-2018
+
+Test Class: Torre_De_Control_Test
+---------------------------------------------------------------------------------------------------------*/
+global class CrearMiembrosCampania_Batch implements Database.Batchable<sObject>{
+    //variables globales de la clase
 	global String gQuery;
 	global String gIdCampaniaCEC;
 	global String gPertenece;
@@ -9,12 +20,15 @@ global class CrearMiembrosCampania_Batch implements Database.Batchable<sObject>{
     global String gTeam;
     global String gNombreSubCampania;
 
+    //Constructor de la clase
 	public CrearMiembrosCampania_Batch(String pQueryOverload,String pPertenece, String pIdCampaniaCEC,String pPrioridad,Integer pScore2,
                                         String pTipoTeam,String pTeam,String pNombreSUbCampania)
     {
+        //se valida si trae un query desde el llamado del batch para asignarlo y ejecutarlo
 		if(pQueryOverload!=null){
             gQuery = pQueryOverload;
         }
+        //mapeo de variables al crear el batch
         this.gPertenece = pPertenece;
         this.gIdCampaniaCEC = pIdCampaniaCEC;
         this.gPrioridad = pPrioridad;
@@ -24,11 +38,13 @@ global class CrearMiembrosCampania_Batch implements Database.Batchable<sObject>{
         this.gNombreSubCampania = pNombreSUbCampania;
 	}
 
+    //Método donde se ejecuta el query
 	global Database.Querylocator start (Database.BatchableContext BC){
         system.debug('::: start - gQuery: ' + gQuery);
         return Database.getQueryLocator(gQuery);
     }
 
+    //Método donde se ejecuta la logica con los registros encontrados por el batch
     global void execute(Database.BatchableContext BC,List<Opportunity> scope) {
         system.debug('::: execute - scope: ' + scope);
         //lista de miembros de campaña a insertar
@@ -59,6 +75,7 @@ global class CrearMiembrosCampania_Batch implements Database.Batchable<sObject>{
         }                
     }
 
+    //Método finish que se ejecuta cuando se procesaron todos los registros
     global void finish(Database.BatchableContext BC) {
     	
     } 

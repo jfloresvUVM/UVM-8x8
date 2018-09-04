@@ -1,4 +1,4 @@
-<apex:page cache="false"  doctype="html-5.0" showheader="false" sidebar="false" standardstylesheets="false" applyBodyTag="false" >
+<apex:page cache="false" controller="ctrl_landing_reasignar_oportunidades" doctype="html-5.0" showheader="false" sidebar="false" standardstylesheets="false" applyBodyTag="false" >
 <style>
 .final_percent{
       text-align: right;
@@ -64,106 +64,291 @@ span.percent_symbol {
     font-weight: 800;
 }
 
+i.fa {
+    /* font-size: 10px; */
+    font-size: 10px !important;
+    margin-top: -13px !important;
+}
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    padding: 12px 8px;
+    vertical-align: middle;
+    font-weight: 400;
+}
+
 </style>
-    
-    <head>        
-        <meta charset="utf-8"/>
-        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>        
-        
+
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+
 
 
   <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700" rel="stylesheet"/>
-        
 
-        <apex:stylesheet value="{!URLFOR($Resource.MD, 'material-dashboard-html-v2.1.0/assets/css/material-dashboard.css?v=2.1.0.css')}" />
-        <apex:stylesheet value="{!URLFOR($Resource.zipCalculadora,'/ZipCalculadora/css/font-awesome.min.css')}"/>
-         
 
-        <!-- Chartist JS -->
+  <apex:stylesheet value="{!URLFOR($Resource.MD, 'material-dashboard-html-v2.1.0/assets/css/material-dashboard.css?v=2.1.0.css')}" />
+  <apex:stylesheet value="{!URLFOR($Resource.zipCalculadora,'/ZipCalculadora/css/font-awesome.min.css')}"/>
+
+
+  <!-- Chartist JS -->
 </head>
 
-    
-    <body>
-        
-          <!-- your content here -->
-    <div class="jumbotron jumbotron-fluid">
+
+<body>
+
+  <!-- your content here -->
+  <div class="jumbotron jumbotron-fluid">
     <div class="container">
       <div class="col-lg-6 jumbo-conainter-content card">
         <h1 class="display-4">Asignación</h1>
-        <p class="lead">Selecciona un Campus</p>
+        <p class="lead"></p>
         <div  class="row">
-          <select class="form-control jumbo-selector">
-            <option>Elige una opción</option>
-          </select>
+          <div class="card_buttons">
+
+            <button type="submit" class="btn btn-info btn-academic" onclick="equal_assign()"><i class="fa fa-balance-scale" aria-hidden="true"></i>
+            Asignar Equitativo</button>
+            <button type="submit" class="btn btn-warning btn-academic" onclick="enable_percent_box()"><i class="fa fa-percent" aria-hidden="true"></i>
+            Asignar Por Peso</button>
+
+          </div>
         </div>
       </div>
       <div class="buttons-header">
-        <button type="submit" class="btn btn-primary btn-academic" onclick="equal_assign()">Asignar Equitativo</button>
-        <button type="submit" class="btn btn-info btn-academic" onclick="remove_opps()">Desasignar</button>
+
+        <button type="submit" class="btn btn-danger btn-academic" onclick="remove_opps()"><i class="fa fa-times" aria-hidden="true"></i>
+        Desasignar</button>
       </div>
     </div>
-    </div>
-      <!-- End Navbar -->
-      <div class="content">
-          <div class="col-lg-11 col-md-12 mx-auto">
-            <div class="card">
-              <div class="card-header card-header-primary">
-                <h4 class="card-title">Opportunidades para asignar <span id="opp_asignar_gerente"></span></h4>
-                <p class="card-category">Seleccione un porcentaje</p>
-                <span class='final_percent' id="main_percent">100</span><span class="percent_symbol">%</span>
-              </div>
-              <div class="card-body table-responsive">
-                <table class="table table-hover">
-                  <thead class="text-warning">
-                      <th><input type="checkbox" class="form-check-input csbox_main" id="main_check" onClick="fill_all_checks()" value="Bike"/></th>
-                    <th>Id</th>
-                    <th>Nombre</th>
-                    <th>Estado</th>
-                    <th>Oportunidades</th>
-                    <th>Porcentaje</th>
-                  </thead>
-                  <tbody id="data-table">
-                      <!--Add the Data Rows  -->
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <button type="button" class="btn btn-success">Confirmar</button>
-
-          </div>
-          <!--End Table  -->
-
+  </div>
+  <!-- End Navbar -->
+  <div class="content">
+    <div class="col-lg-11 col-md-12 mx-auto">
+      <div class="card">
+        <div class="card-header card-header-primary">
+          <h4 class="card-title">Opportunidades para asignar <span id="opp_asignar_gerente"></span></h4>
+          <p class="card-category">Seleccione un porcentaje</p>
+          <span class='final_percent' id="main_percent">100</span><span class="percent_symbol">%</span>
         </div>
-        
-        
-      <!-- Content Ends -->
+        <div class="card-body table-responsive">
+          <table class="table table-hover">
+            <thead class="text-warning">
+              <th><input type="checkbox" class="form-check-input csbox_main" id="main_check" onClick="fill_all_checks()" value="Bike"/></th>
+              <th>Id</th>
+              <th>Nombre</th>
+              <th>Estado</th>
+              <th>Oportunidades</th>
+              <th>Porcentaje</th>
+            </thead>
+            <tbody id="data-table">
+              <!--Add the Data Rows  -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Confirmar</button>
+
+    </div>
+    <!--End Table  -->
+
+  </div>
+
+
+
+  <div class="modal" tabindex="-1" role="dialog" id="myModal">
+
+  <div class="modal-dialog" role="document" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">¿Esta seguro?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Esta seguro que desea aplicar los cambios?.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="sendOpps()">Confirmar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <!-- Content Ends -->
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
-  
-        
-  
+
+
+ <script type="text/javascript">
+
+// Global Variables
+    var opp_gerente;
+    var obj_size =0;
+    var obj_size_active = 0;
+    var porcentaje_gerente = 100;
+    var local_porcentaje_gerente =100;
+    var result_asesor_size;
+    var local_opp_gerente;
+    var agents =[];
+    var agents_org =[];
+    var gerente_campus;
+
+ </script>
+
+ <script type="text/javascript">
+
+   function sendConfirmedOpps(data){
+
+ Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.updateOpportunidadesAgentes}',data,
+                function(result, event){
+                if (event.status) {
+                    //Se agrega las opciones al selector.
+                   console.log(result);
+
+                } else if (event.type === 'exception') {
+                    console.log(event.messsage)
+
+                }
+            }
+        );
+
+   }
+ </script>
+
+ <script type="text/javascript">
+
+ function sendOpps(){
+
+      $('#myModal').modal('hide')
+
+  var agents_to_send=[];
+
+  for (var i = 0; i < agents.length; i++) {
+
+    var obj = {};
+    obj["id"] = agents[i].id;
+    obj["opp"] = agents[i].opp - agents_org[i].opp;
+    agents_to_send.push(obj);
+
+  }
+
+  var myJSON = JSON.stringify(agents_to_send);
+
+  console.log(myJSON);
+
+  sendConfirmedOpps(myJSON);
+}
+
+</script>
+
 <script>
 
-var opp_gerente =3513;
-var obj_size =0;
-var obj_size_active = 0;
-var porcentaje_gerente = 100;
-  //Test data Object Agent
-var agents =[
-{id:"0000830048f", name:"Rubie Almeida", status:"activo",opp:456},
-{id:"0000830048f", name:"Maritza Ackles", status:"activo",opp:2423},
-{id:"0000830048f", name:"Verdell Key", status:"inactivo",opp:6345},
-{id:"0000830048f", name:"Dorene Nehls", status:"activo",opp:2145},
-{id:"0000830048f", name:"Ludivina Selders", status:"activo",opp:6343},
-{id:"0000830048f", name:"Maritza Ackles", status:"inactivo",opp:2423},
-{id:"0000830048f", name:"Mario Navigation", status:"activo",opp:2423}
+function getRemoteGerenteOpp(){
 
-];
 
-$("#opp_asignar_gerente").text(opp_gerente);
+  //Metodo para llamar obtener todos los Cammpus
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.getOppGerente}',
+                function(result, event){
+                if (event.status) {
+                    //Se agrega las opciones al selector.
+                    console.log("opp_gerente: "+result);
+                    opp_gerente = parseInt(result);
+                    $("#opp_asignar_gerente").text(opp_gerente);
+                    getRemoteAgents();
 
+                } else if (event.type === 'exception') {
+                    console.log(event.messsage)
+
+                }
+            }
+        );
+
+}
+
+</script>
+
+
+
+<script>
+
+function getRemoteGerenteData(){
+
+
+  //Metodo para llamar obtener todos los Cammpus
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.getNombreCampusGerente}',
+                function(result, event){
+                if (event.status) {
+                     //Se agrega las opciones al selector.
+                     console.log("opp_gerente_data: "+result[0].Campus);
+                     // opp_gerente = parseInt(result);
+                     $(".lead").text(result[0].GerenteName);
+                     gerente_campus = result[0].Campus;
+                     console.log("gerente campus:"+gerente_campus);
+                     getRemoteGerenteOpp();
+
+                } else if (event.type === 'exception') {
+                    console.log(event.messsage)
+
+                }
+            }
+        );
+
+}
+
+</script>
+
+
+ <script type="text/javascript">
+
+    function getRemoteAgents() {
+
+        Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.getAgentes}',gerente_campus,
+                function(result, event){
+                  if (event.status) {
+
+                   console.log("longitud:"+result.length);
+                    //Se agrega las opciones al selector.
+                    result_asesor_size = result.length;
+
+                    for (var i =0; i < result.length; i++){
+                        // $( "#campus_select" ).append("<option>"+result[i]+"</option>");
+
+                        var obj = {}; var obj2 = {};
+                        obj["id"] = result[i].id;
+                        obj2["id"] = result[i].id;
+                        obj["name"] = result[i].name;
+                        obj2["opp"] = parseInt(result[i].opp);
+
+                        if (result[i].status == "true"){
+                         obj["status"] = "activo";
+                       }else{
+                        obj["status"] = "inactivo";
+                      }
+                        //obj["status"] = result[i].status;
+                        obj["opp"] = parseInt(result[i].opp);
+                        agents.push(obj);
+                        agents_org.push(obj2);
+                      }
+                    //console.log("Agentes--obj");
+                    //console.log(agents);
+        //Metodo para llamar obtener todos los Cammpus
+        fill_agents();
+
+      } else if (event.type === 'exception') {
+                    console.log(event.messsage)
+
+                }
+            }
+        );
+    }
 
 </script>
 
@@ -172,45 +357,71 @@ $("#opp_asignar_gerente").text(opp_gerente);
 
 function fill_agents(){
 //VF Remote Simulations
-$("#data-table").empty();
-console.log("Fill_Agentes:");
+  $("#data-table").empty();
+  console.log("Fill_Agentes:");
+  // console.log("Agente 0 original"+ agents_org[0].opp);
+  obj_size =0;
 
-obj_size =0;
-
-  for (var key in agents){
-
-    var status_list = agents[key].status;
-
-    var table = "<tr><td><input type='checkbox' class='form-check-input csbox' value ='"+key+"'></td>"+
-                "<td>"+agents[key].id+"</td>"+
-                "<td>"+agents[key].name+"</td>";
-
-                if (status_list == "activo"){
-                  // console.log(agents[key].name+" esta activo");
-
-                  obj_size_active = obj_size_active + 1
-                  table = table+"<td>"+agents[key].status+"</td>";
-
-                }else {
-
-                    table = table+"<td style='color:red;'>"+agents[key].status+"</td>";
-                }
+  console.log("agents--- on fill");
+  //console.log(agents);
+  console.log("On Remote agents: prev = "+agents_org[5].opp + " agente: "+agents[5].opp);
 
 
-                table = table+"<td class='opp_count_table'>"+agents[key].opp+"</td>"+
-                "<td><input type='number' class='form-control input-quantity' onchange='updatePercent(this.value)'></td></tr>";
+  for (var i=0; i<result_asesor_size; i++){
 
-                obj_size=obj_size+1;
+    var status_list = agents[i].status;
+
+    var table = "<tr><td><input type='checkbox' class='form-check-input csbox' value ='"+i+"'></td>"+
+    "<td>"+agents[i].id+"</td>"+
+    "<td>"+agents[i].name+"</td>";
+
+    if (status_list == "activo"){
+                  // console.log(agents[i].name+" esta activo");
+
+           obj_size_active = obj_size_active + 1
+           table = table+"<td>"+agents[i].status+"</td>";
+
+    }else {
+
+           table = table+"<td style='color:red;'>"+agents[i].status+"</td>";
+
+          }
 
 
-                // console.log(status_list);
+    table = table+"<td class='opp_count_table'>"+agents[i].opp+"</td>"+
+    "<td><input type='number' id='"+i+"' class='form-control input-quantity' onchange='updatePercent(this.value, this.id)' disabled></td></tr>";
+
+    obj_size=obj_size+1;
 
 
-               $("#data-table").append(table);
+    $("#data-table").append(table);
 
   }
+
+
+
 }
 
+
+</script>
+
+<script>
+
+function enable_percent_box(){
+
+  console.log("Agente 0 original on enable_percent_box"+ agents_org[0].opp);
+
+  var box = document.getElementsByClassName("input-quantity");
+
+  local_opp_gerente = opp_gerente;
+
+  for (var i =0; box[i]; ++i){
+
+    if (agents[i].status == "activo"){
+      box[i].removeAttribute('disabled');
+   }
+  }
+}
 
 </script>
 
@@ -229,6 +440,7 @@ function fill_all_checks(){
 
   var checkedValue = null;
   var inputElements = document.getElementsByClassName('csbox');
+
   for(var i=0; inputElements[i]; ++i){
         if(inputElements[i].checked){
 
@@ -238,10 +450,7 @@ function fill_all_checks(){
 
         inputElements[i].checked=true;
       }
-
-
   }
-
 }
 
 </script>
@@ -293,24 +502,66 @@ function equal_assign(){
 
 </script>
 
+<script type="text/javascript">
+
+function reassing_opps(ids){
+
+ Visualforce.remoting.Manager.invokeAction(
+            '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.updateOportunidadesGerente}',ids,
+                function(result, event){
+                if (event.status) {
+                    //Se agrega las opciones al selector.
+                    console.log("desassingados: "+result);
+                    // opp_gerente = parseInt(result);
+                    // $("#opp_asignar_gerente").text(opp_gerente);
+                    // getRemoteAgents();
+
+                } else if (event.type === 'exception') {
+                    console.log(event.messsage)
+
+                }
+            }
+        );
+
+}
+
+
+</script>
+
 <script>
 function remove_opps(){
 
   var checkedValue = null;
   var mainCheckbox = document.getElementById('main_check');
-
+  var ids =[];
   var inputElements = document.getElementsByClassName('csbox');
   for(var i=0; inputElements[i]; ++i){
         if(inputElements[i].checked){
              //checkedValue = inputElements[i].value;
-             console.log("Remove opps:"+inputElements[i].value);
-             remove_this_opps(inputElements[i].value);
+            console.log("Remove opps:"+inputElements[i].value);
+            // remove_this_opps(inputElements[i].value);
+
+            var input_value = inputElements[i].value;
+
+            var obj = {};
+            obj["id"] = agents[input_value].id;
+
+            ids.push(obj);
+
+
+           // remove_ids()
         }
   }
 
-  $("#opp_asignar_gerente").text(opp_gerente);
-  mainCheckbox.checked = false;
-  fill_agents();
+   var myJSON = JSON.stringify(ids);
+
+   console.log(myJSON);
+
+   reassing_opps(myJSON);
+
+   $("#opp_asignar_gerente").text(opp_gerente);
+   mainCheckbox.checked = false;
+   fill_agents();
 
 }
 
@@ -319,13 +570,72 @@ function remove_opps(){
 
 <script>
 
-function updatePercent(porcentaje){
+function updatePercent(porcentaje,id){
 
-  if (porcentaje <= porcentaje_gerente){
-      porcentaje_gerente = porcentaje_gerente - porcentaje;
+ var x = document.getElementsByClassName("opp_count_table");
+
+ porcentaje = parseInt(porcentaje);
+
+ console.log("parseado porcentaje"+porcentaje);
+
+  if( isNaN(porcentaje)){
+
+    console.log("On Delete of Percent");
+
+    x[id].innerHTML = parseInt(agents_org[id].opp);
+
+    var rest_opp = parseInt(agents[id].opp) - parseInt(agents_org[id].opp);
+    agents[id].opp = parseInt(agents_org[id].opp);
+
+    console.log("Resta:valor:"+rest_opp);
+    local_opp_gerente = local_opp_gerente + rest_opp;
+
+     var percent_sum = Math.round(((rest_opp*100)/opp_gerente));
+
+
+    console.log("local variable "+local_opp_gerente + "suma a percent"+percent_sum);
+    local_porcentaje_gerente = local_porcentaje_gerente + percent_sum;
+
+    if (local_porcentaje_gerente > 100 ){
+
+          local_porcentaje_gerente = 100;
+    }
+
   }
 
-  $("#main_percent").text(porcentaje_gerente);
+  if ((porcentaje <= porcentaje_gerente ) && (porcentaje != null)){
+
+
+      local_porcentaje_gerente = local_porcentaje_gerente - porcentaje;
+
+      var opp_box_percent = parseInt((porcentaje/100)*opp_gerente);
+
+      console.log ("porcentaje a añadir:"+opp_box_percent);
+      local_opp_gerente = local_opp_gerente - opp_box_percent;
+
+      agents[id].opp = agents[id].opp + opp_box_percent;
+
+      x[id].innerHTML = parseInt(x[id].innerHTML)+opp_box_percent;
+
+      console.log ("opss gerente_porcentaje: "+local_opp_gerente);
+
+      console.log ("opss porcentaje gerete: "+local_porcentaje_gerente);
+
+      if (local_porcentaje_gerente == 0){
+
+        if (local_opp_gerente != 0 ){
+            console.log("Entro Condicion Residuo");
+            agents[id].opp = agents[id].opp + local_opp_gerente;
+            x[id].innerHTML = parseInt(x[id].innerHTML)+local_opp_gerente;
+            local_opp_gerente = 0;
+        }
+      }
+
+
+  }
+
+  $("#main_percent").text(local_porcentaje_gerente);
+  $("#opp_asignar_gerente").text(local_opp_gerente);
 
 
 }
@@ -333,8 +643,8 @@ function updatePercent(porcentaje){
 
 
 <script type="text/javascript">
-  window.onload = fill_agents();
-</script>      
-        
-    </body>
+  window.onload = getRemoteGerenteData();
+</script>
+
+</body>
 </apex:page>

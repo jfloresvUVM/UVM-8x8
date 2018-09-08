@@ -1,16 +1,18 @@
 <apex:page cache="false" doctype="html-5.0" showheader="false" controller="Ctrl_Landing_Academico" sidebar="false" standardstylesheets="false" applyBodyTag="false" >
     <head>        
-                <title>Programas Académicos</title>
+        <title>Programas Académicos</title>
         <meta charset="utf-8"/>
         <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>        
         <apex:stylesheet value="{!URLFOR($Resource.zipCalculadora,'/ZipCalculadora/css/font-awesome.min.css')}"/>
         <apex:stylesheet value="{!URLFOR($Resource.AnimatedCSS)}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.ProgramasAcademicos, 'css/material.css')}"/>
+
         
         <apex:stylesheet value="{!URLFOR($Resource.MD, 'material-dashboard-html-v2.1.0/assets/css/material-dashboard.css?v=2.1.0.css')}" />
 
         <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css"/>
+        <!-- <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css"/> -->
 
     </head>
 
@@ -65,7 +67,7 @@
     cursor: pointer;
   }
 
-    /* Contenedores */
+  /* Contenedores */
 
   #contenedor_niveles {
     display: none;
@@ -84,24 +86,24 @@
     width: 500px;
   }
 
-    /* Cards niveles */
+  /* Cards niveles */
 
-    .card-body {
-        height: 40px;
-    }
-    .card .card-body:hover {
-        background-color: rgb(61, 61, 61);
-        opacity: 0.5;
-        color: white;
-        cursor: pointer;
-    }
-    .card-title {
-        text-align: left;
-    }
-    .card-title:hover {
-        color: white;
-        cursor: pointer;or: pointer;
-    }
+  .card-body {
+    height: 40px;
+  }
+  .card .card-body:hover {
+    background-color: rgb(61, 61, 61);
+    opacity: 0.5;
+    color: white;
+    cursor: pointer;
+  }
+  .card-title {
+    text-align: left;
+  }
+  .card-title:hover {
+    color: white;
+    cursor: pointer;or: pointer;
+  }
   .modal-dialog {
       width: 1024px;
   }
@@ -142,7 +144,7 @@
           <div id="tipos_niveles" class="mdl-color--blue-grey-800 mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
             <div class="demo-card-wide mdl-card mdl-shadow--2dp">
                 <div id="tipos_niveles" class='demo-card-wide mdl-card mdl-shadow--2dp'>
-                    <!-- Inyeccion dinamica desde => getRemoteNiveles() -->
+                  <!-- Inyeccion dinamica desde => getRemoteNiveles() -->
                 </div>
             </div>
           </div>
@@ -151,13 +153,13 @@
       <div id="contenedor_verticales" class="mdl-grid demo-content animated fadeIn">
         <h3>Verticales</h3> <hr></hr>
         <div id="tipo_vertical" class="demo-charts mdl-color--blue-grey-800 mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
-            <!-- Inyeccion dinamica desde => getRemoteVerticales() -->
+          <!-- Inyeccion dinamica desde => getRemoteVerticales() -->
         </div>
       </div>
       <div id="contenedor_programas" class="mdl-grid demo-content animated fadeIn">
         <h3>Programas</h3> <hr></hr>
         <div id="tipo_programa" class="demo-charts mdl-color--blue-grey-800 mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
-            <!-- Inyeccion dinamica desde => getRemoteProgramas() -->
+          <!-- Inyeccion dinamica desde => getRemoteProgramas() -->
         </div>
       </div>
     </main>
@@ -180,7 +182,7 @@
       </div>
     </div>
   </div>
-    <div id="bottom"></div>
+  <div id="bottom"></div>
 </body>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -190,7 +192,7 @@
 <script type="text/javascript">
 
 
-// Sección: Principal.
+// Sección: Principal
 // Cargamos funciones que corren al cargar la pagina.
 
 
@@ -280,16 +282,16 @@ function getRemoteCampus() {
 
 function getRemoteNiveles(campus) {
   var modal;
-    // Vaciamos contenedores para que no se apilen.
+  // Vaciamos contenedores para que no se apilen.
   $("#tipos_niveles").empty();  
   $("#tipo_vertical").empty(); 
   $("#tipo_programa").empty();
   $( "#contenedor_verticales").hide();
   $( "#contenedor_programas").hide();
   // Auto scroll cuando se ejecuta la función.
-    $('html, body').animate({
-        scrollTop: $("#bottom").offset().top
-    }, 1000);
+  $('html, body').animate({
+    scrollTop: $("#bottom").offset().top
+  }, 1000);
   // Metodo para llamar obtener todos los Campus
   Visualforce.remoting.Manager.invokeAction(
     // Mandamos campus como parametro a Ctrl_Landing_Academico.cls
@@ -298,22 +300,22 @@ function getRemoteNiveles(campus) {
       if (event.status) {
         // Iteramos lista y agregamos niveles de modo dinámico.
         for (var i = 0; i < result.length; i ++) { 
-                     // Condicionamos el resultado de nuestro cilclo para asignar imágenes dinámicas a niveles.
-                    if(result[i] == 'Preparatoria') {
-                      img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/preparatoria.jpg')}'";
+           // Condicionamos el resultado de nuestro cilclo para asignar imágenes dinámicas a niveles.
+          if(result[i] == 'Preparatoria') {
+            img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/preparatoria.jpg')}'";
           } else if (result[i] == 'Licenciatura') {
             img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/licenciatura.jpg')}'";
-                    } else if (result[i] == 'Licenciatura Ejecutiva') {
-                      img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/licenciaturaEjecutiva.jpg')}'";
-                    } else if (result[i] == 'Posgrado') {
-                      img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/posgrado.jpg')}'";
-                    } else if (result[i] == 'Online Posgrado') {
-                      img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/onlinePosgrado.jpg')}'";
-                    } else if (result[i] == 'Online LX') {
-                      img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/onlineLX.jpg')}'";
-                    } else if (result[i] == 'Tecnico Superior') {
-                      img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/tecnicoSuperior.jpg')}'";
-                    }
+          } else if (result[i] == 'Licenciatura Ejecutiva') {
+            img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/licenciaturaEjecutiva.jpg')}'";
+          } else if (result[i] == 'Posgrado') {
+            img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/posgrado.jpg')}'";
+          } else if (result[i] == 'Online Posgrado') {
+            img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/onlinePosgrado.jpg')}'";
+          } else if (result[i] == 'Online LX') {
+            img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/onlineLX.jpg')}'";
+          } else if (result[i] == 'Tecnico Superior') {
+            img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/tecnicoSuperior.jpg')}'";
+          }
           $("#tipos_niveles").append("<div class='col-lg-4 col-sm-4 col-md-6'><div class='card animated fadeIn' style='width: 22rem;'><img onClick='getRemoteContenedorNivel(\"" + result[i]+ "\")' class='card-img-top' src=' " + img + " '/><div class='card-body' onClick='getRemoteVerticales(\"" + result[i] + "\")'><h5 class='card-title'> " + result[i] + " </div></div></h5></div>");
         }
       } else if (event.type === 'exception') { 
@@ -333,14 +335,14 @@ function getRemoteNiveles(campus) {
 
 
 function getRemoteVerticales(nivelVertical) {
-        // Vaciamos contenedores para que no se apilen.
+    // Vaciamos contenedores para que no se apilen.
     $( "#tipo_vertical").empty(); 
     $( "#tipo_programa").empty();
     // Auto scroll cuando se ejecuta la función.
-        $('html, body').animate({
-        scrollTop: $("#bottom").offset().top
-        }, 1000);
-        // Metodo para obtener todos los Campus desde => obtenerCampus().
+    $('html, body').animate({
+    scrollTop: $("#bottom").offset().top
+    }, 1000);
+    // Metodo para obtener todos los Campus desde => obtenerCampus().
   Visualforce.remoting.Manager.invokeAction(
     // Mandamos campus, nivelVertical como parametro a Ctrl_Landing_Academico.cls
     '{!$RemoteAction.Ctrl_Landing_Academico.obtenerVerticalNivel}', campus, nivelVertical,
@@ -367,12 +369,12 @@ function getRemoteVerticales(nivelVertical) {
 
 
 function getRemoteProgramas(vertical) {
-    // Vaciamos contenedores para que no se apilen.
+  // Vaciamos contenedores para que no se apilen.
   $( "#tipo_programa").empty();
   // Auto scroll cuando se ejecuta la función.
   $('html, body').animate({
-        scrollTop: $("#bottom").offset().top
-    }, 1000);
+    scrollTop: $("#bottom").offset().top
+  }, 1000);
   // Metodo para obtener todos los Campus desde => obtenerCampus().
   Visualforce.remoting.Manager.invokeAction(
     // Mandamos campus, nivel y vertical como parametro a Ctrl_Landing_Academico.cls

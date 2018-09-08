@@ -97,7 +97,7 @@ public with sharing class Ctrl_Landing_Academico {
 																												 AND Programa__r.Vertical__c = :vertical
 																												 AND Programa__r.IsActive = true ];
 
-		// Crear una lista de mapas para almacenar programas dentro del ciclo
+		// Crear una lista de mapas para almacenar programas dentro del ciclo.
 		Map<String, String> programas = new Map<String, String>();
 
 		// Crear una lista de mapas para almacenar programas_academicos.
@@ -117,22 +117,23 @@ public with sharing class Ctrl_Landing_Academico {
 		// Regreamos => listaProgramas lleno.
 		return listaProgramas;
 	} // fin => obtenerProgramasAcademicos().
-
+	
+	// Método para obtener las soluciones recogiendo el idPrograma en el objeto => Programa_Salesforce__c
 	@RemoteAction
 	public static  List<Map<String, String>> obtenerSoluciones(String idPrograma) {
-		// Query para obtener programas academicos.
-		//List<Programa_del_campus__c> programas_academicos = [SELECT Busqueda_programa__c, Programa__c, Name FROM Programa_del_campus__c ORDER BY Name LIMIT 40];
+		// Query para obtener soluciones.
 		List<Solution> solucionesPrograma = [SELECT SolutionName, Programa_Salesforce__c, Detalles__c  
-																					 FROM Solution 
-																					 WHERE Programa_Salesforce__c  =  :idPrograma ];
+																				 FROM Solution 
+																				 WHERE Programa_Salesforce__c  =  :idPrograma ];
+		
 
-		// Crear una lista para almacenar programas_academicos.
+		// Crear una lista para almacenar soluciones dentro del ciclo.
 		Map<String, String> soluciones = new Map<String, String>();
 
-
+		// Crear una lista de mapas para almacenar soluciones.
 		List<Map<String, String>> listaSoluciones = new List<Map<String, String>>();
 
-		// Iteración de => programas_academicos.
+		// Iteración de => solucionesPrograma.
 		for (Solution a: solucionesPrograma) {
 
 			soluciones = new Map<String, String>();
@@ -146,10 +147,8 @@ public with sharing class Ctrl_Landing_Academico {
 			listaSoluciones.add(soluciones);
 
 		}
-		// Regreamos => nombre_programa lleno.
-		//System.debug(nombre_programa); 
-		//return nombre_programa;
+		// Regreamos => listaSoluciones lleno. 
 		return listaSoluciones;
-	} // fin => obtenerProgramasAcademicos().
+	} // fin => obtenerSoluciones().
 
 }

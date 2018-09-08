@@ -1,0 +1,475 @@
+<apex:page cache="false" doctype="html-5.0" showheader="false" controller="Ctrl_Landing_Academico" sidebar="false" standardstylesheets="false" applyBodyTag="false" >
+    <head>        
+        <title>Programas Académicos</title>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>        
+        <apex:stylesheet value="{!URLFOR($Resource.zipCalculadora,'/ZipCalculadora/css/font-awesome.min.css')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.AnimatedCSS)}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.ProgramasAcademicos, 'css/material.css')}"/>
+
+        
+        <apex:stylesheet value="{!URLFOR($Resource.MD, 'material-dashboard-html-v2.1.0/assets/css/material-dashboard.css?v=2.1.0.css')}" />
+
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+        <!-- <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.cyan-light_blue.min.css"/> -->
+
+    </head>
+
+<style>
+
+  html, body {
+    background-color: white;
+    font-family: 'Roboto', 'Helvetica', sans-serif;
+  }
+
+  /* Header */
+
+  .jumbotron.jumbotron-fluid {
+    background-color: white;
+    height: 300px;
+    /*background-image: url('{!URLFOR($Resource.banners, 'banner_2.jpg')}');*/
+    background-image: url('{!URLFOR($Resource.ProgramasAcademicos, '/assets/banner.jpg')}');
+    /*background-image: url('https://pre00.deviantart.net/dc34/th/pre/f/2015/030/6/f/_minflat__dark_material_design_wallpaper__4k__by_dakoder-d8fjqzu.jpg');*/
+    background-position: center;
+    background-size: cover;
+  }
+  select.form-control.jumbo-selector {
+    width: 300px;
+    margin-left: 15px;
+  }
+  .jumbo-conainter-content.card {
+    padding-left: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-right: 50px;
+  }
+
+  /* Contenido Niveles(estilos personalizados) */
+
+  .demo-content {
+    max-width: 1150px;
+  }
+  .mdl-grid  {
+    border-radius: 10px;
+  }
+  a.mdl-button-style {
+    background-color: #ef2127;
+    margin: 10px;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 50px;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+  }
+  a.mdl-button-style:hover {
+    background-color: #ff6666;
+    cursor: pointer;
+  }
+
+  /* Contenedores */
+
+  #contenedor_niveles {
+    display: none;
+    border-radius: 100px;
+  }
+  #contenedor_verticales {
+    display: none;
+  }
+  #contenedor_programas {
+    display: none;
+  }
+  #contenedor_solucion {
+    display: none;
+  }
+  .modal-dialog {
+    width: 500px;
+  }
+
+  /* Cards niveles */
+
+  .card-body {
+    height: 40px;
+  }
+  .card .card-body:hover {
+    background-color: rgb(61, 61, 61);
+    opacity: 0.5;
+    color: white;
+    cursor: pointer;
+  }
+  .card-title {
+    text-align: left;
+  }
+  .card-title:hover {
+    color: white;
+    cursor: pointer;or: pointer;
+  }
+  .modal-dialog {
+      width: 1024px;
+  }
+  @media (min-width: 576px) {
+    .modal-dialog {
+        /* max-width: 500px; */
+        margin: 1.75rem auto;
+    }
+  }
+  @media (max-width: 411px) {
+    .modal-dialog {
+        /* max-width: 500px; */
+        width: 400px;
+        margin: 1.75rem auto;
+    }
+  }
+
+</style>
+
+<body onload="getOnloadFunctions()">
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <div class="col-lg-6 jumbo-conainter-content card">
+        <h1 class="display-4">Campus UVM</h1>
+        <p class="lead">Selecciona un Campus para Mayor informacón..</p>
+        <div  class="row">
+          <select id="campus_select" onchange="getTagValue(this)" class="form-control jumbo-selector">
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="demo-layout mdl-layout mdl-layout--fixed-header">
+    <main class="mdl-color--white-100">
+      <center>
+        <div id="contenedor_niveles" class="mdl-grid demo-content animated fadeIn">
+          <h3 style="text-align: left;">Niveles</h3> <hr></hr>
+          <div id="tipos_niveles" class="mdl-color--blue-grey-800 mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+            <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+                <div id="tipos_niveles" class='demo-card-wide mdl-card mdl-shadow--2dp'>
+                  <!-- Inyeccion dinamica desde => getRemoteNiveles() -->
+                </div>
+            </div>
+          </div>
+        </div>
+      </center>
+      <div id="contenedor_verticales" class="mdl-grid demo-content animated fadeIn">
+        <h3>Verticales</h3> <hr></hr>
+        <div id="tipo_vertical" class="demo-charts mdl-color--blue-grey-800 mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+          <!-- Inyeccion dinamica desde => getRemoteVerticales() -->
+        </div>
+      </div>
+      <div id="contenedor_programas" class="mdl-grid demo-content animated fadeIn">
+        <h3>Programas</h3> <hr></hr>
+        <div id="tipo_programa" class="demo-charts mdl-color--blue-grey-800 mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+          <!-- Inyeccion dinamica desde => getRemoteProgramas() -->
+        </div>
+      </div>
+    </main>
+  </div>
+  <!-- Modal dinámico para niveles -->
+  <div class="modal fade" id="modalGeneral" tabindex="-1" role="dialog" aria-labelledby="nivelModalTitulo" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitulo"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div id="modalCuerpo" class="modal-body">
+        </div>
+        <div class="modal-footer">
+          <button style="background-color: #ef2127;font-weight: bold; " type="button" class="btn" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="bottom"></div>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+
+
+// Sección: Principal
+// Cargamos funciones que corren al cargar la pagina.
+
+
+function getOnloadFunctions() {
+  var campus;
+  var nivel;
+  var idPrograma;
+  // Carga de metodo => comprobarCampus().
+  window.onload = comprobarCampus();
+}
+
+
+// Seccion: Comprobar Campus.
+// Función para condicionar si se ha recibido un campus por parametro
+// si no, el campus se agrega manualmente.
+
+
+function comprobarCampus(){
+  // Declaramos => getUrlParameter para obtener parametro enviado desde page(landing_Campus2).
+  var getUrlParameter = function getUrlParameter(sParam) {
+  var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+      sURLVariables = sPageURL.split('&'),
+      sParameterName,
+      i;
+  for (i = 0; i < sURLVariables.length; i++) {
+    sParameterName = sURLVariables[i].split('=');
+    if (sParameterName[0] === sParam) {
+      return sParameterName[1] === undefined ? true : sParameterName[1];
+    }
+  }
+};
+// Obtenemos parametro 'campus'.
+campus = getUrlParameter('campus');
+// Llenamos el selector de campus dependiendo valores -parametro/manual-.
+  // Campus viene lleno.
+  if (campus != null) {
+    $("#campus_select").append("<option>"+ campus +"</option>"); 
+    getRemoteNiveles(campus);
+    getRemoteCampus();
+  } 
+  // Campus vacio, llenado manual.
+  else {
+    $( "#campus_select").append("<option>-- Seleccione Campus --</option>"); 
+    // Mostramos selector manual de cmapus cargado.
+    getRemoteCampus();
+    // Mostramos niveles con el parametro-valor manual del campus.
+    getRemoteNiveles(campus);
+  }
+}
+// Recibimos seleción del selector de forma manual.
+function getTagValue(selTag) {
+  var campus_manual = selTag.options[selTag.selectedIndex].text;
+  // Cambiamos variable de campus(parametro) por variable manual.
+  campus = campus_manual;  
+  // Envíamos como parámetro a => getRemoteNiveles() la selección manual.
+  getRemoteNiveles(campus_manual);
+}
+
+
+// Seccion: Campus.
+// Función para enlistar todos los posibles campus con programas, 
+// activos.
+
+
+function getRemoteCampus() {
+  // Metodo para obtener todos los Campus.
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.Ctrl_Landing_Academico.obtenerCampus}',
+      function(result, event) {
+      if (event.status) {
+        // Iteramos y agregamos las opciones al selector => <select id="campus_select">.
+        for (var i = 0; i < result.length; i ++) { 
+          $( "#campus_select").append("<option>"+result[i]+"</option>"); 
+        }
+      } else if (event.type === 'exception') { 
+          console.log(event.messsage)
+      }
+    }
+  ); 
+}
+
+
+// Seccion: Niveles.
+// Función para mostrar todos los niveles dependiendo del campus
+// recibido de forma manual o por parametro.
+
+
+function getRemoteNiveles(campus) {
+  var modal;
+  // Vaciamos contenedores para que no se apilen.
+  $("#tipos_niveles").empty();  
+  $("#tipo_vertical").empty(); 
+  $("#tipo_programa").empty();
+  $( "#contenedor_verticales").hide();
+  $( "#contenedor_programas").hide();
+  // Auto scroll cuando se ejecuta la función.
+  $('html, body').animate({
+    scrollTop: $("#bottom").offset().top
+  }, 1000);
+  // Metodo para llamar obtener todos los Campus
+  Visualforce.remoting.Manager.invokeAction(
+    // Mandamos campus como parametro a Ctrl_Landing_Academico.cls
+    '{!$RemoteAction.Ctrl_Landing_Academico.obtenerNivelesCampus}', campus,
+      function(result, event){
+      if (event.status) {
+        // Iteramos lista y agregamos niveles de modo dinámico.
+        for (var i = 0; i < result.length; i ++) { 
+           // Condicionamos el resultado de nuestro cilclo para asignar imágenes dinámicas a niveles.
+          if(result[i] == 'Preparatoria') {
+            img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/preparatoria.jpg')}'";
+          } else if (result[i] == 'Licenciatura') {
+            img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/licenciatura.jpg')}'";
+          } else if (result[i] == 'Licenciatura Ejecutiva') {
+            img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/licenciaturaEjecutiva.jpg')}'";
+          } else if (result[i] == 'Posgrado') {
+            img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/posgrado.jpg')}'";
+          } else if (result[i] == 'Online Posgrado') {
+            img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/onlinePosgrado.jpg')}'";
+          } else if (result[i] == 'Online LX') {
+            img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/onlineLX.jpg')}'";
+          } else if (result[i] == 'Tecnico Superior') {
+            img = "{!URLFOR($Resource.ProgramasAcademicos, 'assets/niveles/tecnicoSuperior.jpg')}'";
+          }
+          $("#tipos_niveles").append("<div class='col-lg-4 col-sm-4 col-md-6'><div class='card animated fadeIn' style='width: 22rem;'><img onClick='getRemoteContenedorNivel(\"" + result[i]+ "\")' class='card-img-top' src=' " + img + " '/><div class='card-body' onClick='getRemoteVerticales(\"" + result[i] + "\")'><h5 class='card-title'> " + result[i] + " </div></div></h5></div>");
+        }
+      } else if (event.type === 'exception') { 
+          console.log(event.messsage)
+      }
+      console.log(result);
+      $( "#contenedor_niveles").show();
+    }
+  );
+}
+
+
+// Seccion: Vertical.
+// Función para mostrar verticales dependiendo el nivel
+// seleccionado en la función getRemoteVerticales(nivelVertical)
+// dentro de  $("#tipos_niveles").
+
+
+function getRemoteVerticales(nivelVertical) {
+    // Vaciamos contenedores para que no se apilen.
+    $( "#tipo_vertical").empty(); 
+    $( "#tipo_programa").empty();
+    // Auto scroll cuando se ejecuta la función.
+    $('html, body').animate({
+    scrollTop: $("#bottom").offset().top
+    }, 1000);
+    // Metodo para obtener todos los Campus desde => obtenerCampus().
+  Visualforce.remoting.Manager.invokeAction(
+    // Mandamos campus, nivelVertical como parametro a Ctrl_Landing_Academico.cls
+    '{!$RemoteAction.Ctrl_Landing_Academico.obtenerVerticalNivel}', campus, nivelVertical,
+      function(result, event){
+      nivel = nivelVertical;
+      if (event.status) { 
+          $( "#contenedor_verticales").show(); 
+          // Iteramos lista y agregamos a etiqueta => <select id="programa_select">
+          for (var i = 0; i < result.length; i ++) { 
+            $("#tipo_vertical").append("<a style='color:white;' onClick='getRemoteProgramas(\"" + result[i] + "\")' class='mdl-button-style mdl-button-red mdl-js-button mdl-button--raised mdl-js-ripple-effect animated pulse'>" + result[i] + "</a>"); 
+          }
+      } else if (event.type === 'exception') { 
+          console.log(event.messsage)
+      }
+    }
+  );
+}
+
+
+// Seccion: Programas.
+// Funcion para mostrar los programas dependiendo la vertical
+// seleccionada en la función getRemoteProgramas(vertical)
+// dentro de $("#tipo_vertical").
+
+
+function getRemoteProgramas(vertical) {
+  // Vaciamos contenedores para que no se apilen.
+  $( "#tipo_programa").empty();
+  // Auto scroll cuando se ejecuta la función.
+  $('html, body').animate({
+    scrollTop: $("#bottom").offset().top
+  }, 1000);
+  // Metodo para obtener todos los Campus desde => obtenerCampus().
+  Visualforce.remoting.Manager.invokeAction(
+    // Mandamos campus, nivel y vertical como parametro a Ctrl_Landing_Academico.cls
+    '{!$RemoteAction.Ctrl_Landing_Academico.obtenerProgramasAcademicos}', campus, nivel, vertical,
+      function(result, event){
+      if (event.status) {
+        $( "#contenedor_programas").show(); 
+        // Iteramos lista y agregamos a etiqueta => <select id="programa_select">
+        for (var i = 0; i < result.length; i ++) { 
+          if (result[i] == '') {
+            console.log('no encontrado');
+          }
+          $( "#tipo_programa").append("<a onClick='getRemoteSoluciones(\"" + result[i].Id  + "\")' value='" + result[i].Id + "' style='color:white;' class='mdl-button-style mdl-button-red mdl-js-button mdl-button--raised mdl-js-ripple-effect animated pulse'>" + result[i].Nombre + "</a>"); 
+        }
+      } else if (event.type === 'exception') { 
+        console.log(event.messsage)
+      }
+    }
+  );
+}
+
+
+// Seccion: Soluciones.
+
+
+function getRemoteSoluciones(idPrograma) {
+  // Vaciamos contenedores para que no se apilen.
+  $( "#modalTitulo").empty();
+  $( "#modalCuerpo").empty();
+  // Metodo para obtener todos los Campus desde => obtenerCampus().
+  Visualforce.remoting.Manager.invokeAction(
+    // Mandamos campus, nivel y vertical como parametro a Ctrl_Landing_Academico.cls
+    '{!$RemoteAction.Ctrl_Landing_Academico.obtenerSoluciones}', idPrograma,
+      function(result, event){
+      if (event.status) {
+        // Iteramos lista y agregamos a etiqueta => <select id="programa_select">
+        for (var i = 0; i < result.length; i ++) { 
+          //Se parsea elemento String -> HTML
+          var parser = new DOMParser; // new parser
+          var dom = parser.parseFromString(
+          '<!doctype html><body>' + result[i].Detalles,
+          'text/html'); // Se parsea un String a HTML
+          var decodedString = dom.body.textContent; //Se Obtiene el Body del DOM
+          console.log(result[i]);
+          if (result[i].Id == '') {
+            alert('no encontrado');
+          }
+          $( "#modalTitulo").append("<h4>" + result[i].Solucion + "</h4>");
+          $( "#modalCuerpo").append("<p>" + decodedString+ "</p>");
+          $('#modalGeneral').modal('show');
+        }
+      } else if (event.type === 'exception') { 
+        console.log(event.messsage)
+      }
+    }
+  );
+}
+
+
+// Sección: Contenedor Niveles. 
+
+
+function getRemoteContenedorNivel(nivel) {
+  // Vaciamos contenedores para que no se apilen.
+  $( "#modalTitulo").empty();
+  $( "#modalCuerpo").empty();
+  // Metodo para obtener todos los Campus desde => obtenerCampus().
+  Visualforce.remoting.Manager.invokeAction(
+    // Mandamos campus, nivel y vertical como parametro a Ctrl_Landing_Academico.cls
+    '{!$RemoteAction.Ctrl_Landing_Academico.obtenerContenedores}', nivel,
+      function(result, event){
+      if (event.status) {
+        // Iteramos lista y agregamos a etiqueta => <select id="programa_select">
+        for (var i = 0; i < result.length; i ++) { 
+        console.log(result[i]);
+          //Se parsea elemento String -> HTML
+          var parser = new DOMParser; // new parser
+          var dom = parser.parseFromString(
+          '<!doctype html><body>' + result[i].Detalles,
+          'text/html'); // Se parsea un String a HTML
+          var decodedString = dom.body.textContent; //Se Obtiene el Body del DOM
+          console.log(result[i]);
+          if (result[i].Id == '') {
+            alert('no encontrado');
+          }
+          $( "#modalTitulo").append("<h3>" + result[i].Solucion + "</h3>");
+          $( "#modalCuerpo").append("<p>" + decodedString+ "</p>");
+          $('#modalGeneral').modal('show');
+        }
+      } else if (event.type === 'exception') { 
+        console.log(event.messsage)
+      }
+    }
+  );
+}
+
+</script>
+</apex:page>

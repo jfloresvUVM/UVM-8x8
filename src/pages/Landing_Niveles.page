@@ -1,0 +1,281 @@
+<!-- 
+
+** Autor: Eduardo Pérez. - 11-08-2018
+** Descripción: 
+** Landing_Niveles
+** Filtro de Niveles a Campus disponibles, con programas activos.
+** El último filtro es Campus.
+** (Una vez seleccionado el campus, se envia como parametrom a = > Landing_Campus2.page)
+
+-->
+
+<apex:page cache="false" doctype="html-5.0" showheader="false" controller="Ctrl_Landing_Niveles" sidebar="false" standardstylesheets="false" applyBodyTag="false" >
+
+    <head>        
+				<title>Niveles Académicos</title>
+        <meta charset="utf-8"/>
+        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>        
+        <apex:stylesheet value="{!URLFOR($Resource.zipCalculadora,'/ZipCalculadora/css/font-awesome.min.css')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.AnimatedCSS)}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.ProgramasAcademicos, 'css/material.css')}"/>
+        <apex:stylesheet value="{!URLFOR($Resource.MD, 'material-dashboard-html-v2.1.0/assets/css/material-dashboard.css?v=2.1.0.css')}" />
+        <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+    </head>
+
+<style>
+
+  html, body {
+    background-color: white;
+    font-family: 'Roboto', 'Helvetica', sans-serif;
+  }
+
+  /* Header */
+
+  .jumbotron.jumbotron-fluid {
+    background-color: white;
+    height: 300px;
+    background-image: url('{!URLFOR($Resource.ProgramasAcademicos, '/assets/banner.jpg')}');
+    background-position: center;
+    background-size: cover;
+  }
+  select.form-control.jumbo-selector {
+    width: 300px;
+    margin-left: 15px;
+  }
+  .jumbo-conainter-content.card {
+    padding-left: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-right: 50px;
+  }
+
+  /* Contenido Niveles(estilos personalizados) */
+
+  .demo-content {
+    max-width: 1150px;
+  }
+  .mdl-grid  {
+  	border-radius: 10px;
+  }
+  a.mdl-button-style {
+    background-color: #ef2127;
+    margin: 10px;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 50px;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+  }
+  a.mdl-button-style:hover {
+    background-color: #ff6666;
+    cursor: pointer;
+  }
+
+	/* Contenedores	*/
+ 
+  #contenedor_verticales {
+    display: none;
+  }
+  #contenedor_programas {
+    display: none;
+  }
+
+  #contenedor_campus {
+    display: none;
+    border-radius: 100px;
+  }
+
+</style>
+
+<body onload="getOnloadFunctions()">
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <div class="col-lg-6 jumbo-conainter-content card">
+        <h1 class="display-4">Niveles UVM</h1>
+        <p class="lead">Selecciona un Nivel para Mayor informacón..</p>
+        <div  class="row">
+          <select id="niveles_select" onchange="getTagValue(this)" class="form-control jumbo-selector">
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="demo-layout mdl-layout mdl-layout--fixed-header">
+    <main class="mdl-color--white-100">
+      <div id="contenedor_verticales" class="mdl-grid demo-content animated fadeIn">
+        <h3>Verticales</h3> <hr></hr>
+        <div id="tipo_vertical" class="demo-charts mdl-color--blue-grey-800 mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+          <!-- Inyeccion dinamica desde => getRemoteVerticales() -->
+        </div>
+      </div>
+      <div id="contenedor_programas" class="mdl-grid demo-content animated fadeIn">
+        <h3>Programas</h3> <hr></hr>
+        <div id="tipo_programa" class="demo-charts mdl-color--blue-grey-800 mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+        	<!-- Inyeccion dinamica desde => getRemoteVerticales() -->
+        </div>
+      </div>
+      <div id="contenedor_campus" class="mdl-grid demo-content animated fadeIn">
+        <h3>Campus</h3> <hr></hr>
+        <div id="tipo_campus" class="demo-charts mdl-color--blue-grey-800 mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-grid">
+          <!-- Inyeccion dinamica desde => getRemoteVerticales() -->
+        </div>
+      </div>
+    </main>
+  </div>
+	<div id="bottom"></div>
+</body>
+
+<script src="{!URLFOR($Resource.LibreriasGenerales, '/LibreriasUVM/JS/jquery-3.3.1.min.js')}"></script>
+<script src="{!URLFOR($Resource.LibreriasGenerales, '/LibreriasUVM/JS/bootstrap-4.0.0-dist/js/bootstrap.min.js')}"></script>
+<script type="text/javascript">
+
+
+// Sección: Principal.
+// Cargamos funciones que corren al cargar la pagina.
+
+
+function getOnloadFunctions() {
+  // var campus;
+  var nivel;
+  // Carga de metodo => comprobarCampus().
+  window.onload = getRemoteNiveles();
+}
+
+
+// Seccion: Selector Manual Nivel.
+
+
+function getTagValue(selTag) {
+  var nivel = selTag.options[selTag.selectedIndex].text;
+  // Envíamos como parámetro a => getRemoteVerticales() la selección manual.
+  getRemoteVerticales(nivel);
+  // Vaciamos contenedores
+  $("#tipo_vertical").empty();
+  $("#tipo_programa").empty();
+  $("#tipo_campus").empty();
+}
+
+
+// Seccion: Nivel.
+// Función para enlistar todos los niveles activos.
+
+
+function getRemoteNiveles() {
+  // Metodo para obtener todos los Campus.
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.Ctrl_Landing_Niveles.obtenerNiveles}',
+      function(result, event) {
+      if (event.status) {
+        // Iteramos y agregamos las opciones al selector => <select id="niveles_select">.
+        $( "#niveles_select").append("<option> -- Selecciona un nivel -- </option>"); 
+        for (var i = 0; i < result.length; i ++) { 
+          $( "#niveles_select").append("<option>"+result[i]+"</option>"); 
+        }
+      } else if (event.type === 'exception') { 
+          console.log(event.messsage)
+      }{}
+    }
+  ); 
+}
+
+
+// Seccion: Verticales.
+// Función para mostrar todas las verticales dependiendo el nivel
+// recibido de forma manual.
+
+
+function getRemoteVerticales(nivel) {
+  // Vaciamos contenedores para que no se apilen.
+  $("#tipo_vertical").empty();
+  $("#tipo_programa").empty();
+  $("#tipo_campus").empty();
+  // Auto scroll cuando se ejecuta la función.
+  $('html, body').animate({
+    scrollTop: $("#bottom").offset().top
+  }, 1000);
+  // Metodo para llamar obtener .Verticales disponibles
+  Visualforce.remoting.Manager.invokeAction(
+    // Mandamos nivels como parametro a Ctrl_Landing_Niveles.cls
+    '{!$RemoteAction.Ctrl_Landing_Niveles.obtenerVerticalesNivel}', nivel,
+      function(result, event){
+      if (event.status) {
+        // Iteramos lista y agregamos verticales de modo dinámico.
+        for (var i = 0; i < result.length; i ++) { 
+          $("#tipo_vertical").append("<a onClick='getRemoteProgramas(\"" + nivel + "\", \"" + result[i] + "\")' style='color:white;' class='mdl-button-style mdl-button-red mdl-js-button mdl-button--raised mdl-js-ripple-effect animated pulse'>" + result[i] + "</a>"); 
+        }
+      } else if (event.type === 'exception') { 
+          console.log(event.messsage)
+      }
+      $("#contenedor_verticales").show();
+      console.log(result);
+    }
+  );
+}
+
+
+// Seccion: Programas.
+// Función para mostrar programas dependiendo el nivel y vertical.
+
+
+function getRemoteProgramas(nivel, vertical) {
+    // Vaciamos contenedores para que no se apilen.
+    $("#tipo_programa").empty();
+    $("#tipo_campus").empty();
+    // Auto scroll cuando se ejecuta la función.
+    $('html, body').animate({
+    scrollTop: $("#bottom").offset().top
+    }, 1000);
+    // Metodo para obtener Programas disponibles.
+  Visualforce.remoting.Manager.invokeAction(
+    // Mandamos nivel, vertical parametro a Ctrl_Landing_Niveles.cls
+    '{!$RemoteAction.Ctrl_Landing_Niveles.obtenerProgramas}', nivel, vertical,
+      function(result, event){
+      if (event.status) { 
+          // Iteramos lista
+          for (var i = 0; i < result.length; i ++) { 
+            $("#tipo_programa").append("<a style='color:white;' onClick='getRemoteCampus(\"" + nivel + "\",\"" + result[i] + "\")' class='mdl-button-style mdl-button-red mdl-js-button mdl-button--raised mdl-js-ripple-effect animated pulse'>" + result[i] + "</a>"); 
+          }
+      } else if (event.type === 'exception') { 
+          console.log(event.messsage)
+      }
+      $("#contenedor_programas").show();
+    }
+  );
+}
+
+
+// Seccion: Campus.
+// Funcion para mostrar los campus dependiendo el nivel
+// y el programa. 
+
+
+function getRemoteCampus(nivel, programa) {
+    // Vaciamos contenedores para que no se apilen.
+    $( "#tipo_campus").empty();
+    // Auto scroll cuando se ejecuta la función.
+    $('html, body').animate({
+    scrollTop: $("#bottom").offset().top
+    }, 1000);
+    // Metodo para obtener todos los Campus diponibles.
+  Visualforce.remoting.Manager.invokeAction(
+    // Mandamos nivel y programa como parametro a Ctrl_Landing_Niveles.cls
+    '{!$RemoteAction.Ctrl_Landing_Niveles.obtenerCampus}', nivel, programa,
+      function(result, event){
+      if (event.status) { 
+          // Iteramos lista
+          for (var i = 0; i < result.length; i ++) { 
+            console.log(result);
+            $("#tipo_campus").append("<a href='/apex/Landing_Campus2?campus=" + result[i] + " 'target='_blank''' style='color:white;' class='mdl-button-style mdl-button-red mdl-js-button mdl-button--raised mdl-js-ripple-effect animated pulse'>" + result[i] + "</a>"); 
+          }
+      } else if (event.type === 'exception') { 
+          console.log(event.messsage)
+      }
+      console.log(result); 
+      $("#contenedor_campus").show();
+    }
+  );
+}
+
+</script>
+</apex:page>

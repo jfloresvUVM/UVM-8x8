@@ -1,216 +1,2311 @@
 <apex:page cache="false" controller="ctrl_landing_reasignar_oportunidades" doctype="html-5.0" showheader="false" sidebar="false" standardstylesheets="false" applyBodyTag="false" >
+<style>
 
-    <style>
-    .final_percent{
-          text-align: right;
-          position: absolute;
-          right: 0;
-          margin-right: 100px;
-          font-size: 51px;
-          margin-top: -33px;
-          opacity: 0.7;
-    }
-	</style>
+body {
+  font-weight: 500;
+}
+
+.final_percent {
+  text-align: right;
+  position: absolute;
+  right: 0;
+  margin-right: 65px;
+  font-size: 51px;
+  margin-top: -40px;
+  opacity: 0.7;
+}
+
+.jumbotron.jumbotron-fluid {
+  background-color: white;
+  height: 200px;
+  /* -webkit-box-shadow: 0px 3px 12px 0px rgba(0,0,0,0.46);
+  -moz-box-shadow: 0px 3px 12px 0px rgba(0,0,0,0.46);
+  box-shadow: 0px 3px 12px 0px rgba(0,0,0,0.46); */
+  background-image: url('{!URLFOR($Resource.banners, 'banner_2.jpg')}');
+  background-position: b2m;
+  background-size: cover;
+  margin-bottom: 0;
+}
+h1.display-4 {
+  font-weight: 400;
+}
+
+select.form-control.jumbo-selector {
+  width: 300px;
+  margin-left: 15px;
+}
+
+.buttons-header {
+  right: 0;
+  position: relative;
+  text-align: right;
+  margin-top: -60px;
+}
+
+.jumbo-conainter-content.card {
+  padding-left: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-right: 50px;
+  top: 0;
+  margin-top: -45px;
+}
+
+.csbox {
+  margin-top: -10px!important;
+  margin-left: -5px!important;
+}
+
+.csbox_main{
+  margin-top: -10px!important;
+  margin-left: -5px!important;
+
+}
+
+span.percent_symbol {
+  right: 0;
+  position: absolute;
+  font-size: 52px;
+  opacity: 0.7;
+  margin-top: -40px;
+  margin-right: 26px;
+  font-weight: 800;
+}
+
+
+/* Revision 2 */
+
+.container_custom {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+
+ul.nav.nav-tabs {
+  /* background-color: #cc3937; */
+  /* height: 60px; */
+  padding: 0;
+}
+
+
+/* navs */
+.nav-tabs .nav-item {
+  /* margin-top: 10px; */
+}
+
+/* li.nav-item.active {
+background-color: #b02d2b;
+border-style: solid;
+height: 60px;
+border-width: 1px;
+border-color: #8d1c1b;
+border-left: none;
+border-top: none;
+border-b2m: none;
+-webkit-box-shadow: inset -2px 0px 5px 0px rgba(0,0,0,0.27);
+-moz-box-shadow: inset -2px 0px 5px 0px rgba(0,0,0,0.27);
+box-shadow: inset -2px 0px 5px 0px rgba(0,0,0,0.27);
+} */
+
+li {
+  background-color: #4e5b67;
+  border-radius: 5px;
+  border-bottom: none;
+}
+
+a.nav-link {
+  margin-top: 10px!important;
+}
+
+
+/* navs */
+div#filters {
+  background-color: #ededed;
+border-style: solid;
+border-width: 0.5px;
+border-color: #ededed;
+/* margin: 20px; */
+/* padding: 30px; */
+}
+
+.conainter-fiters {
+  margin: 20px;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+transition: all 0.3s
+}
+
+.conainter-fiters:hover {
+  /* box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
+}
+
+.form-check, label {
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #555555;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.filter_section {
+  padding: 20px;
+}
+
+button.btn.btn-sm.btn-danger.btn-dessasignar {
+  right: 0;
+  position: absolute;
+  margin-right: 20px;
+  margin-top: -20px;
+  font-size: 11px;
+  width: auto;
+  padding: 5px;
+}
+
+i.fa.fa-times {
+  font-size: 10px!important;
+  margin-right: 5px;
+  margin-top: -12px!important;
+}
+
+input[type="radio"], input[type="checkbox"] {
+  box-sizing: border-box;
+  padding: 0;
+  margin-top: -7px!important;
+}
+
+div#number_alert {
+    z-index: 9999;
+    position: fixed;
+    bottom: -15px;
+    width: 100%;
+    left: 0;
+    right: 0;
+}
+
+button.btn.btn-primary.btn_add {
+  width: 95%;
+  margin-top: 40px;
+}
+
+.filter_labels{
+  border-color: #d6d6d6;
+  border-width: 1px;
+  border-style: solid;
+  font-size: 13px;
+  margin: 5px;
+  /* background-color: #d6d5d5; */
+  border-radius: 5px;
+  padding: 5px;
+  -webkit-box-shadow: 0px 3px 19px 0px rgba(0,0,0,0.13);
+  -moz-box-shadow: 0px 3px 19px 0px rgba(0,0,0,0.13);
+  box-shadow: 0px 3px 19px 0px rgba(0,0,0,0.13);
+}
+
+.filter.md-auto {
+  display: contents;
+  /* padding: 10px; */
+}
+
+.row.row_filters {
+  /* margin-left: 15px; */
+  background-color: #f7f7f7;
+  /* width: 80%; */
+  margin-left: auto;
+  margin-right: auto;
+  height: 50px;
+}
+
+button.btn.btn-sm.btn-danger.delete_filter {
+  margin: 0px;
+  padding: 3px;
+  height: 20px;
+  border-radius: 50%;
+  width: 20px;
+  margin-left: 5px;
+}
+
+
+
+button.btn.btn-primary.mx-auto {
+  width: 20%;
+  margin-b2m: 20px;
+  margin-top: 20px;
+}
+
+.filter.mx-auto {
+  display: inline-flex;
+}
+
+span.filtered_label_warning {
+  font-size: 9px;
+  color: black;
+  font-weight: 500;
+  margin-left: 5px;
+}
+
+.card .card-header .card-title {
+  margin-b2m: 3px;
+  font-weight: 500;
+}
+
+p.card-category {
+  font-weight: 600;
+}
+.table thead tr th {
+  font-size: 1.063rem;
+  font-weight: 500;
+}
+
+h5.modal-title {
+  font-weight: 600;
+}
+
+select#filter_valores {
+  height: 100%;
+}
+
+@media only screen and (max-width: 500px) {
+
+  h1.display-4.lead {
+    font-size: 24px;
+  }
+
+  div#filters {
+    margin-top: -25px;
+    /* padding: 30px; */
+    position: absolute;
+    z-index: 5;
+    width: 100%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    webkit-box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.43);
+    -moz-box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.43);
+    box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.43);
+  }
+
+  .col-lg-6.jumbo-conainter-content.card {
+    margin-top: -6px;
+    height: 130px;
+  }
+
+
+  ul.nav.nav-tabs {
+    display: flex;
+    margin-top: -25px;
+    width: 100%!important;
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 4;
+  }
+
+  .nav-tabs .nav-item .nav-link {
+
+    font-size: 11px;
+  }
+
+  .container_custom {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 24px;
+    width: 90%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  li#nav_filtros {
+    position: absolute;
+    left: 0;
+    z-index: 5;
+    top: -181px;
+    text-align: right;
+    width: 100%;
+    background-color: #000000a6;
+    /* height: 20px; */
+    /* -webkit-box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.43); */
+    -moz-box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.43);
+    /* box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.43); */
+  }
+
+  button.btn.btn-primary.btn_add {
+    width: 70px;
+  }
+
+  button.btn.btn-primary.mx-auto {
+    width: 60%;
+    margin-b2m: 20px;
+    margin-top: 20px;
+  }
+
+  .final_percent {
+    text-align: left;
+    position: absolute;
+    left: 0;
+    margin-left: 18px;
+    font-size: 28px;
+    margin-top: 1px;
+    opacity: 1;
+  }
+
+  span.percent_symbol {
+    left: 0;
+    position: absolute;
+    font-size: 25px;
+    opacity: 0.8;
+    margin-top: 2px;
+    margin-left: 65px;
+    font-weight: 800;
+  }
+
+  span#opp_asignar_gerente {
+    font-weight: bold;
+  }
+
+  span.filtered_label_warning {
+    font-size: 14px;
+    color: black;
+    font-weight: 500;
+    margin-left: 5px;
+  }
+
+  button#confirm_button_1 {
+    margin-b2m: 100px;
+    width: 100%;
+  }
+
+  h1.display-4.lead {
+    font-size: 20px;
+  }
+
+  li#nav_equitativo {
+    width: 33%;
+    text-align: center;
+  }
+
+  li#nav_peso {
+    width: 33%;
+    text-align: center;
+  }
+
+  li#nav_desasignar {
+    width: 33%;
+    text-align: center;
+  }
+
+}
+
+/* NEw Filxes */
+
+li {
+  background-color: #8c9eb1;
+  border-radius: 5px;
+  border-bottom: none;
+}
+
+li:hover{
+  background-color: lightslategrey;
+}
+
+li.nav-item.active {
+  background-color: lightslategrey;
+  z-index: 2;
+  -webkit-box-shadow: 7px -2px 14px -6px rgba(0,0,0,0.61);
+  -moz-box-shadow: 7px -2px 14px -6px rgba(0,0,0,0.61);
+  box-shadow: 7px -2px 14px -6px rgba(0,0,0,0.61);
+}
+
+
+
+i.fa.fa-search {
+  font-size: 13px!important;
+  margin-top: -15px!important;
+}
+
+button.btn.btn-danger.mx-auto {
+  font-weight: bold;
+    right: 0;
+    position: absolute;
+    margin-top: 10px;
+    /* margin-right: 15px; */
+    margin-right: 20px!important;
+}
+
+button#confirm_button_1 {
+  font-weight: bold;
+}
+
+i.fa.fa-check {
+  margin-top: -16px!important;
+  font-size: 12px!important;
+}
+
+/* Table */
+
+.table_section {
+  overflow-x: auto;
+}
+
+.table_container {
+    /* padding-left: 20px; */
+    /* padding-right: 20px; */
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: #f4443a;
+}
+
+table.table.table-sm.table-bordered {
+  background-color: white;
+}
+
+.content {
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 1px;
+  background-color: lightslategray;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 50px;
+}
+
+.nav-tabs .nav-item {
+  margin-bottom: -1px;
+  margin-left: -1px;
+  border-radius: 0px;
+}
+
+.nav_header {
+  margin-top: 10px;
+  padding-left: 21px;
+}
+
+i.fa.fa-table {
+  color: darkgray;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+i.fa.fa-table:hover {
+  color: black;
+  -webkit-transition: 0.5s ease;
+  -moz-transition: 0.5s ease;
+  -o-transition: 0.5s ease;
+  transition: 0.5s ease;
+}
+
+/*  Test Fixes Prev DEsign*/
+
+select#filter_operador {
+    margin-top: 40px;
+}
+
+select#filter_campos {
+    margin-top: 40px;
+}
+
+table#table_1 {
+  margin-top: 50px;
+    margin-left: 5px;
+    margin-right: 50px;
+    overflow-x: scroll;
+    background-color: #e7e7e7;
+
+}
+
+th.th_filter {
+    /* width: 2px!important; */
+    font-size: 12px;
+}
+td.td_filter {
+    font-size: 12px;
+}
+
+
+/* Second Style */
+
+
+
+.content {
+    background-color: transparent;
+    margin-top: -10px;
+}
+
+li {
+    background-color: transparent;
+}
+li:hover {
+    background-color: transparent;
+    /* font-weight: bold!important; */
+}
+
+li.nav-item.active {
+    background-color: transparent;
+    z-index: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border-bottom: black;
+    border-style: solid;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-width: 1px;
+}
+
+.nav-tabs .nav-item .nav-link, .nav-tabs .nav-item .nav-link:hover, .nav-tabs .nav-item .nav-link:focus {
+    border: 0 !important;
+    color: #333 !important;
+    font-weight: 500;
+}
+
+.nav_header {
+    margin-top: 0;
+    margin-left: 30px;
+}
+
+.filter_labels {
+    border-color: #d6d6d6;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 13px;
+    margin: 5px;
+    background-color: white;
+    padding: 5px;
+    webkit-box-shadow: none;
+    moz-box-shadow: none;
+    box-shadow: none;
+    box-shadow: none;
+}
+
+
+
+@media only screen and (max-width: 500px){
+
+ul.nav.nav-tabs {
+    margin-top: -10px;
+
+}
+div#filters{
+  margin-top: 0;
+}
+
+.content {
+    background-color: transparent;
+    margin-top: 60px;
+    padding: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+input#main_check {
+    margin-top: 20px!important;
+}
+
+}
+
+
+</style>
 <head>
   <meta charset="utf-8"/>
-        <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
-        <apex:stylesheet value="{!URLFOR($Resource.zipCalculadora,'/ZipCalculadora/css/font-awesome.min.css')}"/>
-        <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet" />
-        <apex:stylesheet value="{!URLFOR($Resource.MD, 'material-dashboard-html-v2.1.0/assets/css/material-dashboard.css?v=2.1.0.css')}" />
-        <!-- Chartist JS -->
-  <title>
-  Dashboard
-  </title>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700" rel="stylesheet"/>
+  <apex:stylesheet value="{!URLFOR($Resource.MD, 'material-dashboard-html-v2.1.0/assets/css/material-dashboard.css?v=2.1.0.css')}" />
+  <apex:stylesheet value="{!URLFOR($Resource.zipCalculadora,'/ZipCalculadora/css/font-awesome.min.css')}"/>
+  <!-- Chartist JS -->
+  <title>Asignación</title>
 </head>
 
-<body class="">
-  <div class="wrapper">
 
-    <div class="main-panel">
-      <!-- Navbar -->
-      <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
-        <div class="container-fluid">
-          <div class="navbar-wrapper">
-            <a class="navbar-brand" href="#pablo">Asignacíon</a>
+<body>
+
+  <!-- your content here -->
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container_custom">
+      <div class="col-lg-6 jumbo-conainter-content card">
+        <h1 class="display-4 lead"></h1>
+        <p class="lead_sub">Gerente de Campus UVM</p>
+        <div class="filters_content">
+          <div class="checkbox_content">
+            <label data-toggle="collapse" data-target="#filters" aria-expanded="false" aria-controls="collapseOne">
+              <input type="checkbox" id="check_filters"/> Filtrar Oportunidades
+            </label>
           </div>
         </div>
-      </nav>
-      <!-- End Navbar -->
-      <div class="content">
-        <div class="container-fluid">
-          <!-- your content here -->
+      </div>
+    </div>
+  </div>
+  <!--End jumbotron  -->
 
-          <div class="col-lg-10 col-md-12">
 
-            <form>
+
+  <!-- Filters Sections -->
+    <div class="collapse" id="filters">
+      <div class="conainter-fiters">
+        <div  class="filter_section">
+          <div class="row">
+            <div class="col-lg-4">
               <div class="form-group">
-                 <label for="exampleInput1" class="bmd-label-floating">Selecciona un Campus</label>
-                 <select class= "form-control" id= "select_Agent">
-                     	<!--Se cargan los gerentes de esta seccion  -->
-                     <option>Campus1</option>
-                     <option>Campus2</option>
-                     <option>Campus3</option>
-                 </select>
-              </div>
-          </form>
-            <div class="card">
-              <div class="card-header card-header-danger">
-                  <h4 class="card-title">Personas para asignar: <div>4325</div></h4>
-                <p class="card-category">Seleccione un porcentaje para cada agente</p>
-                <span class='final_percent'>60%</span>
-              </div>
-              <div class="card-body table-responsive">
-                <button onclick="equitativeAssign()" type="button" class="btn btn-danger col-md-4 col-lg-auto" >Asignación equitativa</button>
-                <button onclick="weightAssign()" type="button" class="btn btn-danger col-md-4 col-lg-auto">Asignación por peso</button>
-                <button onclick="deasignAgents" type="button" class="btn btn-danger col-md-auto">Desasignar Agentes seleccionados</button>
-                <table class="table table-hover">
-                  <thead class="text-warning">
-                    <th><input type ="checkbox" onclick="checkFuncition()"/></th>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Estado</th>
-                    <th>Oportunidades</th>
-                    <th>Porcentaje</th>
-                  </thead>
-                  <tbody id="MainTable">
-                  </tbody>
-                </table>
-            	<button type="button" onclick="getPercentages()" class="btn btn-success ">Confirmar</button>
+                <label for="filter1">Campo:</label>
+                <select class="form-control" id="filter_campos" onChange="campo_change(this.options[this.selectedIndex].value,this.options[this.selectedIndex].id)" > <option>--Seleccione--</option></select>
               </div>
             </div>
 
-          </div>
-          <!--End Table  -->
+            <div class="col-lg-4">
+              <div class="form-group">
+                <label for="filter2">Operador:</label>
+                <select class="form-control" id="filter_operador" ></select>
+              </div>
+            </div>
 
+            <div class="col-lg-3">
+              <div class="form-group">
+                <label for="filter_valores" >Valores:</label>
+                <div id="filter_valores_container">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-1">
+              <button class="btn btn-danger btn_add" onclick="add_filtro()">
+                <i class="fa fa-plus" aria-hidden="true" ></i></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row row_filters">
+            <div class="filter mx-auto" id="filter_pills">
+              <!-- PIlls container  -->
+            </div>
+          </div>
+          <div class="row">
+            <button class="btn btn-danger mx-auto" onclick="getRemoteFilteredAgents()"><i class="fa fa-search" aria-hidden="true"></i>
+              Buscar</button>
+            </div>
+          </div>
+
+          <!--Info table section  -->
+
+          <div class="table_section">
+            <div class="table_container">
+              <table class="table table-sm table-bordered" id="table_1">
+
+              </table>
+            </div>
+          </div>
+
+          <!-- End info table section  -->
+
+          <!-- Beforce Collapse -->
+        </div>
+        <!-- end Filters Sections -->
+
+
+
+
+
+      <!--Tab navigation  -->
+      <div class="nav_header">
+        <ul class="nav nav-tabs" role="tablist">
+          <li class="nav-item" id="nav_equitativo">
+            <a class="nav-link" role="tab" href="#" onclick="set_equitativo()"><i class="fa fa-bars" aria-hidden="true"></i> Equitativo</a>
+          </li>
+          <li class="nav-item" role="tab" id="nav_peso">
+            <a class="nav-link"  href="#" onclick="set_peso()"><i class="fa fa-percent" aria-hidden="true"></i> Peso</a>
+          </li>
+          <li class="nav-item" id="nav_desasignar">
+            <a class="nav-link" href="#" onclick="set_desasignar()"><i class="fa fa-ban" aria-hidden="true"></i> Desasignar</a>
+          </li>
+          <!-- <li class="nav-item" id="nav_calibrar">
+          <a class="nav-link" href="#" onclick="set_calibra()"><i class="fa fa-balance-scale" aria-hidden="true"></i> Calibrar</a>
+        </li> -->
+      </ul>
+    </div>
+    <!-- Tab navigation -->
+
+
+
+    <div class="content">
+      <div class="col-lg-12 col-md-12">
+        <div class="card ">
+          <div class="card-header">
+            <h4 class="card-title">Opportunidades para asignar <span id="opp_asignar_gerente"></span></h4>
+            <p class="card-category">Seleccione un porcentaje</p>
+            <span class='final_percent' id="main_percent">100</span><span class="percent_symbol">%</span>
+          </div>
+          <div class="card-body table-responsive">
+            <table class="table table-hover">
+              <thead class="text-warning" id="table_head">
+                <th  style="width: 5%; display:none;" id="checkbox_tables"><input  type="checkbox" class="form-check-input csbox_main" id="main_check" onClick="fill_all_checks(this.id)"/></th>
+                <th  style="width: 5%">Datos</th>
+                <th  style="width: 30%">Nombre</th>
+                <th  style="width: 15%">Estado</th>
+                <th  style="width: 10%">Oportunidades</th>
+                <th  style="width: 10%">Por Asignar</th>
+                <th  style="width: 10%">Porcentaje</th>
+              </thead>
+              <tbody id="data-table">
+                <!--Add the Data Rows  -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <button type="button" class="btn btn-success" data-toggle="modal" id="confirm_button_1" data-target="#myModal"><i class="fa fa-check" aria-hidden="true"></i> Confirmar</button>
+
+        <div class="modal" tabindex="-1" role="dialog" id="myModal">
+
+          <div class="modal-dialog" role="document" >
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">¿Esta seguro?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <p>Esta seguro que desea aplicar los cambios?.</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-success" onclick="sendOpps()"><i class="fa fa-check" aria-hidden="true"></i> Confirmar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times" aria-hidden="true"></i> Cerrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading modal -->
+
+        <div class="modal fade" id="loadingModal" tabindex="-1" data-backdrop="static" keyboard ="false" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <!-- <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Espere un Momento</h5>
+            </div> -->
+            <div class="modal-body">
+              <img src="https://cdn.cssauthor.com/wp-content/uploads/2018/06/Animated-Loading-%C3%97-1.gif" class="img_loading" />
+            </div>
+            <div class="modal-footer">
+              <h3>Reasignando opportunidades...</h3>
+            </div>
+          </div>
         </div>
       </div>
 
+      <!-- Table modal -->
+
+      <div class="modal" tabindex="-1" role="dialog" id="tableModal">
+        <div class="modal-dialog" role="document" >
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Tabla de Estatus de Oportunidades</h5>
+              <button type="button" class="close" data-dismiss="modal" onclick="close_modal('tableModal')" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <table class="table table-striped" id="table_2">
+
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+<!-- Alert -->
+<div class="alert alert-danger" role="alert" id="number_alert"></div>
+<!-- Alert -->
+
+
+<!-- Content Ends -->
+
+</div>
+<!--End Table  -->
+
+<!-- Loading modal -->
+
+<div class="modal" tabindex="-1" role="dialog" id="myErrorModal">
+
+  <div class="modal-dialog" role="document" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Espere un momento.</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Para poder continuar debe asignar el <b>100%</b> de las oportunidades.</p>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-danger" onclick="close_modal('myErrorModal')">Cerrar</button>
+      </div>
     </div>
   </div>
+</div>
 
-  <!--   Core JS Files   -->
+
+<!--End Table  -->
+
+</div>
+
+<!--   Core JS Files   -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-<script>
-    //Variables Globales
-	var agents=0;
-    //Funcion para asignar a los agentes por peso
-    function weightAssign(){
-                for(i = 0; i<agents; i++){
-            		$("#formTextPercentage"+i).removeAttr('disabled');
-                    $("#formTextPercentage"+i).val('');
-                }
-    }
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Funcion para asignar los porcentajes equitativos
-    function equitativeAssign(){
-        var active=0;
-        for(i = 0; i<agents; i++){
-            if($("#formActive"+i).html() == "Activo"){
-                active++;
-            }
-        }
-        var equitativePercent = Math.floor(100 / active);
-        var sumPercent = 0;
-        for(i = 0; i<agents; i++){
-            $("#formTextPercentage"+i).attr('disabled','disabled');
-            if($("#formActive"+i).html() == "Activo"){
-                if(active != 1){
-                    sumPercent+= equitativePercent;
-                }else{
-                    equitativePercent = 100 - sumPercent;
-                }
-                active--;
-                $("#formTextPercentage"+i).val(equitativePercent);
-            }
-        }
-    }
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Funcion para marcar los checkboxes de los agentes
-	function checkFuncition(){
 
-    }
-	//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Función para verificar que el 100% se asigna
-    function getPercentages(){
-        var sumPercent = 0.0;
-        var arrPercent = [];
-        var lastAssigned = 0.0;
-        for(i = 0; i< agents ; i++){
-            if ($("#formTextPercentage"+i).val().length != 0) {
-                sumPercent += $("#formTextPercentage"+i).val()/1;
-            }
-    	}
-        //se evalua que se cubra el 100% de las oportunidades
-        if (sumPercent == 100){
-            console.log("correcto");
-        }else{
-            console.log("incorrecto cubra el 100% de las oportunidades");
+<script type="text/javascript">
+// Variables globales que se usan en todas las funciones
+var opp_gerente =0;                    //oportunidades del gerente
+var local_opp_gerente;              //oportunidades independientes del gerente (para cada funcion)
+var obj_size =0;                    //tamaño del objeto
+var obj_size_active = 0;            //tamañp del objecto con estado activo
+var porcentaje_gerente = 100;       //porcentaje del gerente
+var local_porcentaje_gerente =100;  //porcentaje local del genrete (para cada funcion)
+var result_asesor_size;             //tamaño del asesor mediante visual remote
+var tab_selected;                   //tab seleccionada mediante el menu
+var agents =[];                     //Arreglo del objecto Agentes
+var agents_org =[];                 //Copia del arreglo del objecto agentes.
+var gerente_campus;                 //variable del Gerente del Campus
+var gerenteId ='';                  //variable para el Id del Gerente
+var fill_percent_box=[];            //Arreglo de los cuadros por PESO
+var show_percent_box = false;       //Booleando para mostar el Porcentaje
+var mapaResultados=[];              //Booleano si debe o no mostrar los campos de PESO
+var mapaOperadores=[];              //Guardar el mapa de operadores
+var mapaValores=[];                 //Arreglo de Mapa de Valores   
+var mapaCampos=[];                  //Arreglo de Mapa de Campos
+var seleccionados=[];               //Arreglo de Seleccionados
+var filter_campo_txt;               //Variable para el valor del testo de campos
+var filter_operador_txt;            //Variable para el valor de texto de operador
+var filter_valores_txt;             //Varuable para el valor de VALORES
+var filter_count=0;                 //Entero par el contador de filtros
+var filter_position=0;              //Entero para la poscion del fitlro
+var filter_opp_gerente=0;           //Cantidad Local de Oportunidades del Gerente
+var isFiltered = false;             //Booleano que indica si se ingresso un Filtro
+var queryString_to_add ='';         //String que alamacena el string query del los filtros a agergar
+var g_status={};                    //Arreglo que obtiene los estatus Globales
+Visualforce.remoting.timeout = 480000; // Set timeout at page level
+
+// Globals
+</script>
+
+
+<script type="text/javascript">
+
+function obtenerMapaCampos(){
+  //Funcion que obtiene Mapa de Campos para los filtros
+  console.log("Entro Get Campos"); 
+  //Obtenemos el selector de Campos
+  var selector_campos = document.getElementById("filter_campos");
+  //Se llama al metodo dde la visual force que regresa el mapa de los Operadores.
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.obtenerMapaOperadores}',
+    function(result, event){
+      if (event.status) {
+        //Se agrega las opciones al selector.
+        mapaResultados = result;
+        //Se recorre el mapa para agregar los resultados
+        for(var key in mapaResultados){
+          //a la lista de campos se agrega cada elemento de la respuesta
+          console.log(mapaResultados[key]);
+          //Se agrega al codigo los valores del selector.
+          $("#filter_campos").append(
+            "<option id='"+mapaResultados[key].campo+"' value='"+mapaResultados[key].tipo+"'>"+mapaResultados[key].label+"</option>"
+          );
+
         }
+
+      } else if (event.type === 'exception') {
+        console.log(event.messsage);
+        //Se muestra en la consola la excepcion
+      }
     }
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Funcion que restringe la entrada de los numeros del selector de porcentaje a solo numero, y ademas calcula el porcentaje de utilizado
-    function validateNumbers(e){
-        tecla = (document.all) ? e.keyCode : e.which;
-        //Tecla de retroceso para borrar, siempre la permite
-        if (tecla==8){
-            return true;
-        }
-        // se crea un patron para que acepte los digitos del 0 al 9 y el punto decimal
-        patron =/[0-9|.]/;
-        tecla_final = String.fromCharCode(tecla);
-        return patron.test(tecla_final);
+  );
+
 }
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Función para obtener a los Gerentes y llenar la parte del selector de gerente
-    function getNombres() {
-        //se llama a la función remota de apex que hace la busqueda de gerentes
-        Visualforce.remoting.Manager.invokeAction(
-            '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.getAsesores}',
-            function(result, event){
-                if (event.status) {
-                    for (var i = 0; i < result.length; i ++){
-                        var isItActive = "";
-                        if(result[i].IsActive == true){
-                            isItActive = "Activo"
-                        }else{
-                            isItActive = "Inactivo"
-                        }
-                        $("#MainTable").append("<tr>"
-                                               +"<td><input type = 'checkbox'/></td>"
-                                               +"<td><a href='#'>"+result[i].Id+"</a></td>"
-                                               +"<td>"+result[i].Name+"</td>"
-                                               +"<td id='formActive"+i+"'>"+isItActive+"</td>"
-                                               +"<td align='center'>"+"430"+"</td>"
-                                               +"<td><input onkeypress='return validateNumbers(event)' type='text' class='form-control-range' id='formTextPercentage"+i+"'/></td>"
-                                               +"</tr>");
-                        agents++;
-                    }
-                }else if (event.type === 'exception') {
-                    console.log(event.messsage)
-                }
+
+
+function obtenerMapaOperadores(){
+  //Funcion para obtner los mapas de operadores
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.pruebaOperadores}',
+    function(result, event){
+      if (event.status) {
+        //se Asinga el resultado a la variable de Mapa de Operadores
+        console.log(result);
+        mapaOperadores = result;
+      } else if (event.type === 'exception') {
+        console.log(event.messsage);
+        //SE imprime en la consola el mensaje del evento
+      }
+    }
+  );
+
+}
+
+function obtenerMapaValores(){
+//Funcion para obtener los mapas de valores
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.obtenerListadoDeValores}',
+    function(result, event){
+      if (event.status) {
+        //Si es correcto se asigna el valor al mapa de valores.
+        console.log(result);
+        mapaValores = result;
+
+      } else if (event.type === 'exception') {
+        console.log(event.messsage);
+        //Se imprime en consola el error
+      }
+    }
+  );
+
+}
+
+function query_to_add(p_campo,p_operador,p_valor){
+//Funcion que agrega el query depenediendo los valores elegidos.
+  var filtro = {
+    campo:p_campo,          //valor del campo
+    operador:p_operador,    //valor del operador
+    valor:p_valor,          //valores seleccionados
+    editar:false            //variable que dicta si se puede editar el filtro o no
+  }
+  //se agrega el filtro a la lista
+  seleccionados.push(filtro);
+
+  console.log("Seleccionados--->");
+
+  console.log(JSON.stringify(seleccionados));
+
+}
+
+
+function getRemoteFilteredAgents() {
+  //Obtener las oportunidades Filtradas para el gerente.
+  console.log("Filtered OPPS");
+  console.log(JSON.stringify(seleccionados));
+  console.log("opp_gerente on filtered: "+opp_gerente);
+
+  if(seleccionados.length > 0){
+    hide_alert();
+    //Se llama al metodo para obtenet los Filtros de los agentes.
+    Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.getAgentesFiltros}',JSON.stringify(seleccionados),
+      function(result, event){
+        if (event.status) {
+          console.log("REMOTE FILTERED: "+result +"opps_gerente: "+opp_gerente);
+          if(result){
+            //Si el resultado es correcto.
+            console.log("Filtered Opps");
+
+            if(result[1] > 1){
+              //Si el objecto contiene opprotunidades para fitrar
+              filter_opp_gerente = opp_gerente;
+              //Se guardan las oportunidades el gerente en una variable
+              console.log("Filter_backup_gerente:"+filter_opp_gerente);
+              //Las oportunidades del gerente seran ahora las regresadas por la funcion.
+              opp_gerente = parseInt(result[1]);
+              //Se asignan los nuevos valores a la pagina.
+              $("#opp_asignar_gerente").text(opp_gerente);
+              $("#opp_asignar_gerente").append("<span class='filtered_label_warning'>(filtradas)</span>");
+              //Se cambia el valor de la variable sobre el link seleccionado.
+              set_selected("filtros");
+              //Se cambia el valor a verdadero, indicado que existe un filtrado.
+              isFiltered = true;
+              //Se agrega el string del filtro del Query
+              queryString_to_add = result[0];
+              //Se llena pantalla con los nuevos datos.
+              fill_agents();
+              //Se Imprime la tabla de filtros.
+              fill_filter_table(gerenteId);
+
+            }else {
+              //Si el objecto no cuenta con oportunidades
+              isFiltered = false;
+              //Se pone en falso la bandera de los filtros.
+              queryString_to_add='';
+              //Se limpia la variable de los filtros.
+              show_alert("No se encontraon coincidencias");
+              //Se muestra la alerta.
             }
-        );
+            console.log(result);
+
+
+          }
+
+        } else if (event.type === 'exception') {
+          //Si no se regresa una respuesta.
+          console.log(event.messsage);
+          show_alert("No se encontraon coincidencias");
         }
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     window.onload = getNombres();
+      }
+    );
+  }else{
+    //Si no se elige un filtro se muesta una alerta.
+    show_alert("Debe elegir al menos un filtro");
+  }
+}
+
+
+function campo_change(selectObject,idObject){
+  //Funcion que se llama cuando se hace un cambio en el selector.
+  var tipo = selectObject.toUpperCase();
+  console.log("tipo: "+tipo +" id:"+idObject);
+  //Se vacian los campos
+  $("#filter_operador").empty();
+  $("#filter_valores").empty();
+  //Se valida el tipo de campo, para cambiar el tipo de seleccion.
+  if(tipo == "STRING"){
+    $("#filter_valores_container").empty();
+    $("#filter_valores_container").append("<input class='form-control' id='filter_valores' ></input>");
+
+  }else {
+    $("#filter_valores_container").empty();
+    $("#filter_valores_container").append("<select multiple class='form-control' id='filter_valores' ></select>");
+  }
+
+  for(var key in mapaOperadores){
+
+    if (mapaOperadores[key].tipo == tipo){
+
+      for (var i = 0; i < mapaOperadores[key].valores.length; i++) {
+        //Se recorre el arreglo y se agergan los valores,
+        console.log(mapaOperadores[key].valores[i].name);
+        $("#filter_operador").append("<option>"+mapaOperadores[key].valores[i].name+"</option>");
+      
+      }
+    }
+  }
+
+  for(var key in mapaValores){
+    //Se recorre el arreglo de valores
+    console.log("Key:Valoresd: "+key);
+    if (key  == idObject){
+
+      var valores = mapaValores[key];
+      var array = new Array();      
+      //Se separan los valores delimitados por comas.
+      array = valores.toString().split(',');
+      //Se agregan los valores a la pagina.
+      $("#filter_valores").append("<option>--Seleccione--</option>");
+      for (var i = 0; i < array.length; i++) {
+        $("#filter_valores").append("<option value='"+array[i]+"'>"+array[i]+"</option>");
+      }
+    }
+  }
+
+}
+
 
 
 </script>
 
+<script type="text/javascript">
 
-    <!-- <script>
-//  var slider = document.getElementById("myRange");
-//  var output = document.getElementById("demo");
-//output.innerHTML = slider.value; // Display the default slider value
+function add_filtro(){
+  console.log("Entro Filtro");
 
-    // Update the current slider value (each time you drag the slider handle)
-		//slider.oninput = function() {
+  var f_campos = $("#filter_campos option:selected").text();
+  var f_operador = $("#filter_operador option:selected").text();
+  var f_valores = $("#filter_valores").val();
+  console.log("F_campos"+f_campos);
 
-		//output.innerHTML = this.value;
-//}
-  </script> -->
+  var f_random = Math.floor((Math.random() * 100) + 1);
+
+  hide_alert();
+
+  if (f_campos == "--Seleccione--"){show_alert("Seleccione un Campo.");}
+  else if (f_operador == "--Seleccione--"){show_alert("Seleccione un Operador.");}
+  else if (f_valores == "--Seleccione--"){show_alert("Seleccione un Valor.");}
+  else {
+
+
+    $("#filter_pills").append(
+      "<tr id='"+f_campos+f_random+"'><th><div class='filter_labels'>"+f_campos+" "+f_operador+" "+f_valores+"<button  onclick='deleteFilter(\""+f_campos+f_random+"\",\""+filter_position+"\")' class='btn btn-sm btn-danger delete_filter align-top'> X</button></div></th></tr>");
+
+      filter_count = filter_count +1;
+      filter_position = filter_position +1;
+      console.log(f_valores[0]);
+
+
+      var selectobject=document.getElementById("filter_campos");
+      console.log("Selected Object:"+selectobject);
+
+      for (var i=0; i<selectobject.length; i++){
+        console.log("otptions:v"+selectobject.options[i]);
+        if (selectobject.options[i].text == f_campos )
+
+        selectobject.remove(i);
+      }
+
+      $('#filter_campos').val(selectobject.options[0].value).change();
+
+
+
+
+
+      // var array_valores = f_valores.split(',');
+
+      var obj_campos={}
+      var obj_operador={}
+      var obj_valores={}
+
+
+      for(var key in mapaResultados){
+
+        if (mapaResultados[key].label  == f_campos){
+
+          api_campos = mapaResultados[key].campo;
+          console.log("api_campus: "+api_campos);
+          obj_campos["n"] = mapaResultados[key].campo;
+          obj_campos["name"] = mapaResultados[key].label;
+          obj_campos["tipo"] = (mapaResultados[key].tipo).toUpperCase();
+          // ---->
+          obj_operador["name"] = f_operador;
+
+          if (f_valores.length >1){
+
+            var valores_concat='';
+
+            for (var i = 0; i < f_valores.length; i++) {
+              // valores_concat = "'"+f_valores[i]+"'";
+              if (i == f_valores.length-1){
+
+                valores_concat = valores_concat+"'"+f_valores[i]+"'";
+              }else{
+                valores_concat = valores_concat+"'"+f_valores[i]+"'"+",";
+              }
+
+            }
+            obj_valores["name"] =valores_concat;
+
+            console.log('Valores_concat'+valores_concat);
+          }else{
+            obj_valores["name"] = "'"+f_valores[0]+"'";
+          }
+
+          console.log("obj-->Campos");
+          console.log(obj_campos);
+
+
+        }
+      }
+
+      query_to_add(obj_campos,obj_operador,obj_valores);
+
+
+    }
+
+
+
+
+  }
+
+  function deleteFilter(id,posicion){
+    console.log("Antes Delete:"+JSON.stringify(seleccionados));
+    // seleccionados.splice(posicion, 1);
+    var campo_string = id.replace(/[0-9]/g, '');
+
+    for (var i = 0; i < seleccionados.length; i++) {
+      if(seleccionados[i].campo.name == campo_string){
+        seleccionados.splice(i, 1);
+      }
+    };
+
+    console.log("Despues Delete:"+JSON.stringify(seleccionados));
+
+
+    var field_id = "#"+id;
+    $(field_id).remove();
+
+    for(var key in mapaResultados){
+      //a la lista de campos se agrega cada elemento de la respuesta
+      // console.log(mapaResultados[key]);
+      // name:mapaResultados[key].label,//etiqueta
+      // tipo:mapaResultados[key].tipo//tipo de campos
+
+      console.log("campo_string: "+campo_string);
+      if(mapaResultados[key].label == campo_string){
+        $("#filter_campos").append(
+          "<option id='"+mapaResultados[key].campo+"' value='"+mapaResultados[key].tipo+"'>"+mapaResultados[key].label+"</option>"
+        );
+      }
+
+
+
+    }
+
+
+    if(seleccionados.length == 0 ){
+      console.log("No existen filtros");
+
+      set_selected("filtros");
+      isFiltered = false;
+      queryString_to_add = '';
+
+      if (filter_opp_gerente != 0) {
+        opp_gerente = filter_opp_gerente;
+        console.log("No existen filtros: "+opp_gerente+ "filter_backup: "+filter_opp_gerente);
+        $("#opp_asignar_gerente").text(opp_gerente);
+      }
+
+    }
+
+  }
+
+  </script>
+
+
+  <script type="text/javascript">
+
+  function fill_agents(){
+    //Metodo que se utiliza para imprimir en la tabla el objecto de agentes
+    //Se vacia la tabla
+    $("#data-table").empty();
+    console.log("Fill_Agentes:");
+    console.log(tab_selected);
+    console.log("Debug_ variables---->");
+    console.log("Opp_gerente: "+opp_gerente);
+    console.log("Porcentaje gerente: "+porcentaje_gerente);
+
+    obj_size =0;
+    obj_size_active = 0;
+    //Se itera sobre la tabla para llenar las variables globales.
+    for (var i=0; i<result_asesor_size; i++){
+
+      var status_list = agents[i].status;
+      //si el tab es desasingar se muestran las checkboxes
+      if (tab_selected=="desasignar"){
+        var table = "<tr><td><input type='checkbox' class='form-check-input csbox' value ='"+i+"'></td>"+
+        "<td>"+agents[i].id+"</td>"+
+        "<td>"+agents[i].name+"</td>";
+      }else{
+        var table="<tr><td><i class='fa fa-table' aria-hidden='true' onClick='show_table(\""+agents[i].id+"\")'></i></td>"+
+        "<td>"+agents[i].name+"</td>";
+      }
+
+      //se cuentan los agentes activos
+      if (status_list == "activo"){
+
+        obj_size_active = obj_size_active + 1
+        table = table+"<td>"+agents[i].status+"</td>";
+
+      }else {
+        table = table+"<td style='color:red;'>"+agents[i].status+"</td>";
+      }
+
+      //Snippet HTML del codigo que se incrustara en el DOM
+      table = table+"<td class='opp_count_table'>"+agents[i].opp+"</td>";
+
+
+      if(agents_org[i].opp != agents[i].opp){
+
+        console.log("Existen los Originales Agents");
+        var resta = agents[i].opp - agents_org[i].opp;
+        table = table+"<td class='opp_count_table_2' id='por_ass'"+i+"''>"+resta+"</td>";
+
+      }else {table = table+"<td class='opp_count_table_2'></td>";}
+
+      table = table+"<td><input type='text' id='"+i+"' class='form-control input-quantity' onchange='updatePercent(this.value, this.id)' disabled onkeypress='return isNumberKey(event)' onkeyup='isBigger(this.value,this.id)' maxlength='2'></td></tr>";
+
+      obj_size=obj_size+1;
+      //Se Agrega el codigo en el for.
+      $("#data-table").append(table);
+
+    }//end for
+
+  }//end Function
+
+  </script>
+
+
+  <script type="text/javascript">
+  function set_desasignar(){
+    //Se selecciona desasignar en el menu
+    set_selected("desasignar");
+    //Se agrega clase active para css
+    $("#desasignar").addClass("actve");
+    //se muuestran los checkboxes Displau none -> to Block
+    $("#checkbox_tables").css('display','block');
+    //se limpia la tabla
+    reset_all();
+    //Se llena con los nuevos datos.
+    if (isFiltered) {
+      opp_gerente = filter_opp_gerente;
+
+    }
+    fill_agents();
+
+  }
+
+  </script>
+
+
+  <script type="text/javascript">
+
+  function set_peso(){
+    //Se selecciona el tab de peso.
+    set_selected("peso");
+    //Limpia Checkbox
+    $("#checkbox_tables").css('display','none');
+    //Se reinicia todo
+    reset_all();
+    // Se llaman a todas las cajaas por cantidad
+    var box = document.getElementsByClassName("input-quantity");
+    //se imprimen en pantalla
+    fill_agents();
+    //se Asignan opp a la variable global
+    local_opp_gerente = opp_gerente;
+    local_porcentaje_gerente = porcentaje_gerente;
+
+    console.log("opp_gerente:"+opp_gerente);
+    console.log("opp_local:"+local_opp_gerente);
+    //Se itera sobre los estatus activos
+    for (var i =0; box[i]; ++i){
+
+      if (agents[i].status == "activo"){
+        //Se desahbilitan las cajas
+        box[i].removeAttribute('disabled');
+      }
+    }
+    //Se imprime en pantalla el valor.
+    $("#main_percent").text(local_porcentaje_gerente);
+
+    if(isFiltered){
+      $("#opp_asignar_gerente").append("<span class='filtered_label_warning'>(filtradas)</span>");
+    }
+
+  }
+
+  </script>
+
+  <script type="text/javascript">
+
+  function calibrate_opps(data){
+    //Funcion para calibrar los datos.
+    Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.asignarCalibrado}',data,
+      function(result, event){
+        if (event.status) {
+          //Se agrega las opciones al selector.
+          console.log("desassingados: "+result);
+          if(result == true || result == "true"){
+            $('#loadingModal').modal('hide');
+            //Se refresca la pagina.
+            location.reload();
+          }//end if
+        } else if (event.type === 'exception') {
+          console.log(event.messsage)
+
+        }
+      }
+    );
+
+  }
+
+  </script>
+
+  <script type="text/javascript">
+
+  function sendOpps(){
+
+    console.log("porcentaje_gerente on Send:"+local_porcentaje_gerente+ "local: ");
+
+    if(!tab_selected){
+      $('#myModal').modal('hide')
+      show_alert("Por favor seleccione un metodo.");
+    }else{
+
+      if((tab_selected == "peso") && (local_porcentaje_gerente >0)){
+        $('#myModal').modal('hide');
+        $("#myErrorModal").show();
+
+      }else {
+
+        //Mandar las oportunidades al controlador
+        $('#myModal').modal('hide')       //Se esconde el modal de seleccion
+        $('#loadingModal').modal('show'); //Se muesta el de carga.
+        //Se declaarra array para la conversion a json
+        var agents_to_send=[];
+        //Variable que alojara el JSON
+        var myJSON
+        //Se compara si es equitativo o por peso se EL JSON se llena de la misma forma
+        if(tab_selected == "equitativo" || tab_selected == "peso" ){
+
+          for (var i = 0; i < agents.length; i++) {
+
+            var obj = {};
+            obj["id"] = agents[i].id;
+            obj["opp"] = agents[i].opp - agents_org[i].opp;
+            agents_to_send.push(obj);
+
+          }//end for
+          //SE convierte el POJO a JSON
+          myJSON = JSON.stringify(agents_to_send);
+          console.log("JSon Equitativo o Peso");
+          console.log(myJSON);
+          //Se envian al metodo como JSON.
+          sendConfirmedOpps(myJSON);
+
+        }//end if
+
+        //Si la Tab es desasignar se envia el JSON de otra forma
+        if(tab_selected == "desasignar"){
+          //Se declara null los checks
+          var checkedValue = null;
+          //Se habilita check global
+          var mainCheckbox = document.getElementById('main_check');
+          //Arreglo de id's
+          var ids =[];
+          //Arreglo para obternet todos los inputs.
+          var inputElements = document.getElementsByClassName('csbox');
+
+          for(var i=0; inputElements[i]; ++i){
+            if(inputElements[i].checked){
+              //checkedValue = se selecciona;
+              console.log("Remove opps:"+inputElements[i].value);
+              //se obtiene posicion del imput
+              var input_value = inputElements[i].value;
+              var obj = {};
+              //Se obtienen los id se los agentes
+              obj["id"] = agents[input_value].id;
+              //Se agregan al arreglo.
+              ids.push(obj);
+            }//end if
+          }//end for
+
+          var myJSON = JSON.stringify(ids);
+
+          console.log(myJSON);
+          //Se mandan a reasingar las oportunidades
+          reassing_opps(myJSON);
+
+        }//Fin del if
+        //Si la tab es calibrar
+        if(tab_selected == "calibrar"){
+          //Iterando sobre todos las agentes
+          for (var i = 0; i < agents.length; i++) {
+            //Se obtienen las varuiables del objeto.
+            var obj = {};
+            obj["id"] = agents[i].id;
+            obj["opp"] = agents[i].opp;
+            agents_to_send.push(obj);
+
+          }
+          //se convierte JSON to POJO
+          myJSON = JSON.stringify(agents_to_send);
+          console.log("JSon Calibrar");
+          console.log(myJSON);
+          //Se envian a la funcion.
+          calibrate_opps(myJSON);
+        }//fin del if
+
+      }//por peso
+    }
+
+
+  }//fin del metodo.
+
+  </script>
+
+
+
+  <script type="text/javascript">
+
+  function reassing_opps(ids){
+    //funcion para reasingar oportunidades
+    //Se muestra el modal de carga.
+    $('#loadingModal').modal('show');
+    //Remote foce de visual force
+    Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.updateOportunidadesGerente}',ids,
+      function(result, event){
+        if (event.status) {
+          //Se agrega las opciones al selector.
+          console.log("desassingados: "+result);
+          if(result[0] == "true"){
+            $('#loadingModal').modal('hide');
+            location.reload();
+          }
+          if(result[0] == "false"){
+            $('#loadingModal').modal('hide');
+            show_alert(result[1]);
+          }
+
+        } else if (event.type === 'exception') {
+          console.log(event.messsage)
+
+        }
+      }//fin del funcion
+    );
+
+  }//fin de la funcion.
+
+
+  </script>
+
+
+  <script>
+  function remove_opps(){
+    //funciones para remover las oportunidades.
+    var checkedValue = null;
+    var mainCheckbox = document.getElementById('main_check');
+    var ids =[];
+    var inputElements = document.getElementsByClassName('csbox');
+    for(var i=0; inputElements[i]; ++i){
+      if(inputElements[i].checked){
+        //checkedValue = inputElements[i].value;
+        console.log("Remove opps:"+inputElements[i].value);
+        // remove_this_opps(inputElements[i].value);
+        // Se agregan valores de los uinputs
+        var input_value = inputElements[i].value;
+        //var obj
+        var obj = {};
+        obj["id"] = agents[input_value].id;
+        //Se asignan los valores al arrgelo de los ids
+        ids.push(obj);
+      }//if Metodcs
+    }
+    //Se convierte los ids a JSON
+    var myJSON = JSON.stringify(ids);
+
+    console.log(myJSON);
+    //Se mandan a llamar las oportunidades
+    reassing_opps(myJSON);
+
+  }//fin del remove opps
+
+  </script>
+
+  <script type="text/javascript">
+
+
+  function set_calibra(){
+    //Funcion para calibrar
+    set_selected("calibrar");
+    reset_all();
+    //se Asignan valores a las variables
+    var agents_sum = 0;
+    var local_active_agents=0;
+    var opps_left=0;
+    //se itera sobre el tamaño activo de los asesores
+    for(var i=0; i<result_asesor_size; i++){
+
+      if (agents[i].status == "activo"){
+        local_active_agents = local_active_agents+1;
+        agents_sum = agents_sum+ agents[i].opp;
+        agents[i].opp = 0;
+      }//end if
+
+
+    } //end for
+
+    console.log("opps to assign sum: "+agents_sum);
+    //se asignan variables locales paraa ser procesadas
+    local_opp_gerente = opp_gerente;
+    local_opp_gerente = local_opp_gerente + agents_sum;
+    console.log("Suma de gerente: "+local_opp_gerente);
+
+    // Se divide para obtener las oportunidades a asignar
+    var opps_to_assign = Math.floor(local_opp_gerente / local_active_agents);
+    var opps_m = opps_to_assign* local_active_agents;
+    console.log("para asignar: "+opps_to_assign+ " total ="+opps_m);
+    //si las oportnidades son diferentes a las asignadas
+    if (opp_gerente != (opps_m)){
+      //Se obtiene un residuo
+      opps_left = local_opp_gerente - opps_m;
+      console.log("Faltantan "+opps_left+" para asignar total:"+opps_m);
+    }//en if
+
+    for(var i=0; i<result_asesor_size; i++){
+      //Se asigna residuo al ultimo agente.
+      if (agents[i].status == "activo"){
+        agents[i].opp = agents[i].opp + opps_to_assign;
+      }//end if
+
+    }//end for
+
+    // Se realiza otra iteracion para obtner los porcentajes
+    var porcentaje = ((opps_to_assign*100)/local_opp_gerente);
+    //Se obtienen las oportnuniades
+    console.log( "Debuggeando variable"+agents[obj_size-1].name);
+    agents[obj_size-1].opp = agents[obj_size-1].opp + opps_left;
+    //Se asignan las variables globales obteniendo el porcentaje mediante multiplicacion
+    console.log("opp Gerente= "+ parseInt((opps_to_assign*obj_size_active)+opps_left));
+    local_opp_gerente= local_opp_gerente - parseInt((opps_to_assign*obj_size_active)+opps_left);
+    //se imprimen en pantalla
+    fill_agents();
+
+    var sumatoria=0;
+    for (var key in agents){
+      //Si los agentes son activos se les asigna porcentaje
+      if (agents[key].status == "activo"){
+        //Se Redondea el porcentaje
+        $("#"+key).val(Math.floor(porcentaje));
+        sumatoria = sumatoria + Math.floor(porcentaje);
+        //Se comprueba la sumatoria
+        if (sumatoria != 100 && key == (agents.length)-1 ){
+
+          console.log("last input "+key+ "Suamtoria:"+sumatoria);
+          //Sumatoria del porcenjae por cada input
+          $("#"+key).val(Math.floor((100-sumatoria)+porcentaje));
+        }//end if
+
+      }//end if Agente
+
+    }//end for
+
+    //Se imprimen los valores en pantalla
+    $("#main_percent").text("0");
+    $("#opp_asignar_gerente").text("0");
+
+  }//end set_Calibrar
+
+  </script>
+
+
+  <script>
+
+  function updatePercent(porcentaje,id){
+
+    //funcion para actualizar porcentaje
+    var x = document.getElementsByClassName("opp_count_table");
+
+    var y = document.getElementsByClassName("opp_count_table_2");
+
+    //obtener valir entero del porcentaje
+    porcentaje = parseInt(porcentaje);
+    console.log("Valor porcentaje:"+porcentaje);
+    //Si no existe un porcentaje en alguna caja, valida
+    if( isNaN(porcentaje)){
+      //entra a meotodos cuando se borra el porcentaje de la caja
+      console.log("On Delete of Percent");
+      //Obtiene valir entero de la caja
+      x[id].innerHTML = parseInt(agents_org[id].opp);
+      //se opntbiene las oportunidades
+      y[id].innerHTML = '';
+
+      var rest_opp = parseInt(agents[id].opp) - parseInt(agents_org[id].opp);
+
+      agents[id].opp = parseInt(agents_org[id].opp);
+      //Se restan los valores
+      local_opp_gerente = local_opp_gerente + rest_opp;
+      //se redondean los valores de los porcentajes
+      var percent_sum = Math.round(((rest_opp*100)/opp_gerente));
+
+      console.log("local variable "+local_opp_gerente + "suma a percent"+percent_sum);
+      local_porcentaje_gerente = local_porcentaje_gerente + percent_sum;
+
+      if (local_opp_gerente == opp_gerente ){
+        if(local_porcentaje_gerente != 100){
+          //Agregando valores de redondeo
+          local_porcentaje_gerente = local_porcentaje_gerente+ (100-local_porcentaje_gerente);
+        }
+      }//fin del if
+
+    }//if
+
+    if ((porcentaje > local_porcentaje_gerente )){
+
+      show_alert("El valor debe ser menor al porcentaje.");
+      console.log("Valores validados: porcentaje:"+porcentaje+ " gerente: "+local_porcentaje_gerente);
+    }// end if comparasion valor mayor a porcenajte
+
+
+    if ((porcentaje <= local_porcentaje_gerente ) && (porcentaje != null)){
+
+      console.log("Porcentaje es menor al del gerente--->>");
+      console.log("Porcentaje:"+porcentaje+" porcentaje_gerente(Local):"+(local_porcentaje_gerente-porcentaje));
+      hide_alert();
+      local_porcentaje_gerente = local_porcentaje_gerente - porcentaje;
+
+      var opp_box_percent = parseInt(((porcentaje*opp_gerente)/100));
+      local_opp_gerente = local_opp_gerente - opp_box_percent;
+
+      //se igualan las oportunidades de los agentes
+      agents[id].opp = agents[id].opp + opp_box_percent;
+
+      //Se obtiene el valor entero de las cajas
+      x[id].innerHTML = parseInt(x[id].innerHTML)+opp_box_percent;
+      y[id].innerHTML = parseInt(agents[id].opp - agents_org[id].opp);
+
+
+      if (local_porcentaje_gerente < 0) {
+        console.log("Porcentaje Menor a 0------>");
+        console.log("Porcentaje: "+porcentaje+" local_opp_gerente: "+local_opp_gerente+" porcentaje_gerente(Local): "+local_porcentaje_gerente);
+        local_porcentaje_gerente = 0;
+      }
+
+      //Si se llego al final del porcentaje
+      if (local_porcentaje_gerente == 0){
+        //se obtiene el residuo y se asigna a la ultima persona
+        if (local_opp_gerente != 0 ){
+          console.log("Entro Condicion Residuo");
+          agents[id].opp = agents[id].opp + local_opp_gerente;
+          y[id].innerHTML = parseInt(y[id].innerHTML)+local_opp_gerente;
+          x[id].innerHTML = parseInt(x[id].innerHTML)+local_opp_gerente;
+          local_opp_gerente = 0;
+        }//end if
+      }//end if local_porcentaje
+
+    }
+
+
+
+    //se imprimen los valores en pantalla
+    $("#main_percent").text(local_porcentaje_gerente);
+    $("#opp_asignar_gerente").text(local_opp_gerente);
+
+
+  } //fin metodo update Percent
+  </script>
+
+
+  <script type="text/javascript">
+
+  function set_selected(tab){
+    //funcion para agregar dinamismo a las tabs del menu
+    // Se asigna el atributo ACTIVE a las tabs para poder
+    // Mostrar un efecto de click en estas.
+    hide_alert();
+    tab_selected = tab;
+
+    if (tab == "equitativo"){
+
+      $("#nav_equitativo").addClass( "active" );
+      $("#nav_peso").removeClass( "active" );
+      $("#nav_calibrar").removeClass( "active" );
+      $("#nav_desasignar").removeClass( "active" );
+    }
+
+    if (tab == "peso"){
+
+      $("#nav_equitativo").removeClass( "active" );
+      $("#nav_peso").addClass( "active" );
+      $("#nav_calibrar").removeClass( "active" );
+      $("#nav_desasignar").removeClass( "active" );
+    }
+
+    if (tab == "calibrar"){
+
+      $("#nav_equitativo").removeClass( "active" );
+      $("#nav_peso").removeClass( "active" );
+      $("#nav_calibrar").addClass( "active" );
+      $("#nav_desasignar").removeClass( "active" );
+    }
+
+    if (tab == "desasignar"){
+
+      $("#nav_equitativo").removeClass( "active" );
+      $("#nav_peso").removeClass( "active" );
+      $("#nav_calibrar").removeClass( "active" );
+      $("#nav_desasignar").addClass( "active" );
+    }
+
+    if (tab == "filtros"){
+
+      $("#nav_equitativo").removeClass( "active" );
+      $("#nav_peso").removeClass( "active" );
+      $("#nav_calibrar").removeClass( "active" );
+      $("#nav_desasignar").removeClass( "active" );
+
+    }
+
+  } // fin del metodo set selected
+
+
+  </script>
+
+  <script type="text/javascript">
+
+  function set_equitativo(){
+    //funcion para setear los valores de la tab EQUITATIVO
+    set_selected("equitativo");
+    $("#checkbox_tables").css('display','none');
+    //LIMPIA e IMPRIME la pantalla
+    reset_all();
+    fill_agents();
+
+    if (isFiltered) {
+      $("#opp_asignar_gerente").append("<span class='filtered_label_warning'>(filtradas)</span>");
+
+    }
+    var local_opp_gerente = opp_gerente;;
+    console.log("local_opp_Gerente"+local_opp_gerente);
+
+    console.log(obj_size);
+    console.log("active: size"+obj_size_active);
+    //se calculan las oportunidades a asignar
+    var opps_to_assign = parseInt(opp_gerente/obj_size_active);
+    console.log("Por asignar individual:"+opps_to_assign);
+
+    // cALCULANDO Porcentaje
+    var porcentaje = ((opps_to_assign*100)/opp_gerente);
+    console.log("porcentaje:"+porcentaje +"round:"+Math.floor(porcentaje));
+    // CALCULANDO PORCENTAJE
+
+    var opps_m = opps_to_assign*obj_size_active;
+    console.log(opps_m);
+    //Se decalra variable par residuos
+    var opps_left =0;
+    //si las oportunidades son diferentres a las del gerente
+    if (opp_gerente != (opps_m)){
+      //Se entra en residuo de oportunidades
+      opps_left = opp_gerente - (opps_m);
+      console.log("Faltantan "+opps_left+" para asignar total:"+opps_m);
+    }
+
+    for (var key in agents){
+      //se asignan oportunidades a agentes activos
+      if (agents[key].status == "activo"){
+        // console.log("For Agents");
+        var sum =  agents[key].opp + opps_to_assign;
+        // console.log("Previo:"+agents[key].opp);
+        agents[key].opp = sum;
+        // console.log("posterior:"+ agents[key].opp);
+
+      }//end if
+
+    }//end for
+
+    console.log( "Debuggeando variable"+agents[obj_size-1].name);
+    agents[obj_size-1].opp = agents[obj_size-1].opp + opps_left;
+
+    console.log("opp Gerente= "+ parseInt((opps_to_assign*obj_size_active)+opps_left));
+    local_opp_gerente= local_opp_gerente - parseInt((opps_to_assign*obj_size_active)+opps_left);
+    //Se imprimen en pantalla
+    $("#opp_asignar_gerente").text(local_opp_gerente);
+
+    //Se llenan lis agentes den pantalla
+    fill_agents();
+
+    // Se calculan los porcentajes de cada Asesor en el metodo
+    var sumatoria=0;
+    for (var key in agents){
+      //Se les asigna a solo los activos
+      if (agents[key].status == "activo"){
+        //Se obtienen los valores redondeados
+        $("#"+key).val(Math.floor(porcentaje));
+        sumatoria = sumatoria + Math.floor(porcentaje);
+        //Se comprueba la sumatoria
+        if (sumatoria != 100 && key == (agents.length)-1 ){
+
+          console.log("last input "+key+ "Suamtoria:"+sumatoria);
+          //Se añaden los valores
+          $("#"+key).val(Math.floor((100-sumatoria)+porcentaje));
+        }//end if
+
+      }//end if Activo
+
+    }//end if agentes
+
+
+    $("#main_percent").text("0");
+    // Se imprinem en pantalla
+  }//set equitativo
+  </script>
+
+  <script type="text/javascript">
+
+  function getRemoteGerenteData(){
+
+    //Metodo para llamar obtener todos los datos del gerente
+    Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.getNombreCampusGerente}',
+      function(result, event){
+        if (event.status) {
+
+            if(!isEmpty(result)){
+              //Se agrega las opciones al selector.
+              console.log("opp_gerente_data: "+result[0].Campus);
+              // opp_gerente = parseInt(result);
+              $(".lead").text(result[0].GerenteName);
+              gerente_campus = result[0].Campus;
+              gerenteId = result[0].id;
+              console.log("gerente campus:"+gerente_campus+"con id ="+gerenteId);
+              getRemoteGerenteOpp();
+
+            }else{
+              show_alert("No cuenta con un perfil de gerente.");
+            }
+
+
+        } else if (event.type === 'exception') {
+          console.log(event.messsage)
+
+        }// end if exception
+      }
+    );
+
+  }//fin metodos get Remote Gerente
+
+  function getRemoteGerenteOpp(){
+
+    //Metodo para llamar obtener todas las opps del gerente
+    Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.getOppGerente}',
+      function(result, event){
+        if (event.status) {
+          //Se agrega las opciones al selector.
+          console.log("opp_gerente: "+result);
+          opp_gerente = parseInt(result);
+          $("#opp_asignar_gerente").text(opp_gerente);
+          // Cambios Nueva Funcionalidad
+
+          hide_alert();
+          obtenerMapaCampos();
+          obtenerMapaOperadores();
+          obtenerMapaValores();
+          getRemoteAgents();
+
+          //Se esconde la alerta
+
+        } else if (event.type === 'exception') {
+          console.log(event.messsage)
+
+        }
+      }
+    );
+
+  }
+  // End function Remote Gerente opps
+
+  function getRemoteAgents() {
+    //Funcion para obtener los agentes con sus oportunidades
+
+    hide_alert();
+    // String data = JSON.stringify(seleccionados);
+    // console.log("data JSON TO SEND:"+data);
+
+    Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.getAgentes}',gerente_campus,
+      function(result, event){
+        if (event.status) {
+
+          console.log("longitud:"+result.length);
+          //Se agrega las opciones al selector.
+          result_asesor_size = result.length;
+
+          for (var i =0; i < result.length; i++){
+            // $( "#campus_select" ).append("<option>"+result[i]+"</option>");
+            //se hace match de los resultados con el objeto AGENTS
+            //se duplican a otro objecto, manteniendo valores del originak.
+            var obj = {}; var obj2 = {};
+            obj["id"] = result[i].id;
+            obj2["id"] = result[i].id;
+            obj["name"] = result[i].name;
+            obj2["opp"] = parseInt(result[i].opp);
+            //Se cambia el nombre de TRUE-> A ACTIVO
+
+            if (result[i].status == "true"){
+              obj["status"] = "activo";
+            }else{
+              obj["status"] = "inactivo";
+            }
+            //obj["status"] = result[i].status;
+            obj["opp"] = parseInt(result[i].opp);
+            agents.push(obj);
+            agents_org.push(obj2);
+
+            getTable(result[i].id);
+
+          }
+          //se imprimen en agentes
+          fill_agents();
+
+        } else if (event.type === 'exception') {
+          console.log(event.messsage)
+
+        }
+      }
+    );
+  }
+  // End funcion get Remote Agents
+
+
+
+  </script>
+
+  <script type="text/javascript">
+
+  function sendConfirmedOpps(data){
+    console.log("isFilterd: "+isFiltered);
+    if(isFiltered == false){
+      queryString_to_add = "none";
+    }else{
+      queryString_to_add = htmlDecode(queryString_to_add);
+    }
+    //Funcion para enviar las oportunidades al controlador
+    Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.updateOpportunidadesAgentes2}',data,isFiltered,queryString_to_add,
+      function(result, event){
+        if (event.status) {
+          //Se agrega las opciones al selector.
+          console.log("Confidmed Opps"+result);
+
+          if(result[0] == "true"){
+            $('#loadingModal').modal('hide');
+             location.reload();
+          }if(result[0] == "false"){
+              $('#loadingModal').modal('hide');
+              show_alert(result[1]);
+          }
+
+        } else if (event.type === 'exception') {
+          console.log(event.messsage)
+
+        }
+      }
+    );
+
+  }
+
+  function htmlDecode(value) {
+    return $("<textarea/>").html(value).text();
+  }
+  </script>
+
+  <script type="text/javascript">
+  function fill_filter_table(id){
+    $("#table_1").empty();
+
+    var l_estatus = {}
+    // Remote function id's status
+    var l_valores = mapaValores["Estatus__c"];
+    var html;
+    var counter =0;
+    Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.getStatusAgentes}',id,
+      function(result, event){
+        if (event.status) {
+
+          var table_head ="<tr>";
+          var table_body = "<tr>";
+          for (var i = 0; i < l_valores.length; i++) {
+
+            console.log("valor:"+l_valores[i]);
+            for (var j = 0; j < result.length; j++) {
+
+              if(l_valores[i] == result[j] && l_valores[i] != "Estudiante" && l_valores[i] != "Pago Parcial" && l_valores[i] !="Inscrito" && l_valores[i] !="Admision"){
+                console.log("existen:"+l_valores[i]);
+                counter= counter+1;
+              }
+
+            }
+            console.log("cantidad:"+counter);
+            // $("#table_1").append("<tr><th>"+l_valores[i]+"</th><th>"+counter+"</th></tr>");
+
+            if(l_valores[i]!="Estudiante" && l_valores[i] != "Pago Parcial" && l_valores[i] !="Inscrito" && l_valores[i] !="Admision"){
+              table_head = table_head+"<th class='th_filter'>"+l_valores[i]+"</th>";
+              table_body = table_body + "<td class='td_filter'>"+counter+"</td>";
+              counter =0;
+            }
+
+          }
+          table_head = table_head+"</tr>";
+          table_body = table_body+"</tr>";
+
+           $("#table_1").append(table_head+table_body);
+
+        } else if (event.type === 'exception') {
+          console.log(event.messsage);
+
+        }
+      }
+    );
+
+  }
+
+  </script>
+
+  <!-- **************** Script Helpers**************** -->
+  <script type="text/javascript">
+  // Event listener---->
+  $("#button_filters").click(function(){
+    console.log("button_filter");
+    $("#nav_5").toggleClass("active");
+  });
+  // Event listener---->
+  function fill_all_checks(id){
+    //metodos para llenar los agents con checkboxes
+    var checkedValue = document.getElementById(id);
+    var inputElements = document.getElementsByClassName('csbox');
+    if(checkedValue.checked == true){
+      for(var i=0; inputElements[i]; ++i){
+        inputElements[i].checked=true;
+      }
+    }
+    if(checkedValue.checked == false){
+      for(var i=0; inputElements[i]; ++i){
+        inputElements[i].checked=false;
+      }
+    }
+  }
+
+  function reset_all(){
+    //metodos para renicializar las variables
+
+    $("#opp_asignar_gerente").text(opp_gerente);
+    $("#main_percent").text("100");
+
+    for(var i=0; i<result_asesor_size; i++){
+
+      agents[i].opp = agents_org[i].opp;
+    }//end fot
+  }//end metods reset
+
+
+  //funciones para validar los numeros ingresados en PESO
+  function isNumberKey(evt){
+    var charCode = (evt.which) ? evt.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)){  return false; }
+    return true;
+  }
+
+  function isBigger(e,id){
+    // console.log(e);
+    if (e < 0 || e >99){
+      // muestra alerta si el numero es mayor a 100
+      show_alert("El numero debe ser MAYOR a 0 y MENOR a 99");
+
+    }else{
+      hide_alert();
+    }
+
+  }
+
+  function show_alert(message){
+    //funcion que muestra una alerta depenedien
+    $("#number_alert").text(message);
+    $("#number_alert").show(message);
+    $("#confirm_button_1").attr('disabled', 'disabled');
+
+  }
+
+  function hide_alert(){
+    //funcion para esconder la alreta
+    $("#number_alert").hide();
+    $("#confirm_button_1").removeAttr('disabled', 'disabled');
+
+  }
+
+
+  function close_modal(id){
+
+    var select = "#"+id;
+    $(select).hide();
+  }
+
+  function show_table(id){
+
+    console.log(g_status[id]);
+
+    var l_status =  g_status[id];
+    $("#table_2").empty();
+    console.log("empty:"+isEmpty(l_status));
+    var table_html;
+
+    for (var k in l_status){
+      if(k != "Estudiante" && k!= "Pago Parcial" && k!="Inscrito" && k!="Admision"){
+        table_html = table_html+"<tr><th>"+k+"</th>";
+        table_html = table_html+"<th>"+l_status[k]+"</th></tr>";
+      }
+      //
+      console.log("key:"+k +" value: "+l_status[k]);
+    }
+
+    var l_valores = mapaValores["Estatus__c"];
+
+    if(isEmpty(l_status)){
+
+      for (var k = 0; k < l_valores.length; k++) {
+        if(l_valores[k] != "Estudiante" && l_valores[k]!= "Pago Parcial" && l_valores[k]!="Inscrito" && l_valores[k]!="Admision"){
+          table_html = table_html+"<tr><th>"+l_valores[k]+"</th>";
+          table_html = table_html+"<th>0</th></tr>";
+        }
+
+      }
+
+    }
+
+      $("#table_2").append(table_html);
+
+
+      $("#tableModal").show();
+
+
+
+
+  }
+
+
+
+  function getTable(id) {
+
+    var l_estatus = {}
+    // Remote function id's status
+
+    Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ctrl_landing_reasignar_oportunidades.getStatusAgentes}',id,
+      function(result, event){
+        if (event.status) {
+          //Se agrega las opciones al selector.
+          //Se refresca la pagina.
+
+          var l_valores = mapaValores["Estatus__c"];
+
+          for (var i = 0; i < l_valores.length; i++) {
+
+            for (var j = 0; j < result.length; j++) {
+
+              if(l_valores[i] == result[j] ){
+                // console.log("Valor:"+l_valores[i]+" result:"+result[j]);
+                l_estatus[ l_valores[i] ] = j+1;
+              }else{
+                l_estatus[ l_valores[i] ] =0;
+              }
+            }
+          }
+
+          // console.log(l_estatus);
+
+          g_status[id] = l_estatus;
+
+          // console.log(g_status);
+        } else if (event.type === 'exception') {
+          console.log(event.messsage);
+
+        }
+      }
+    );
+
+
+    // $("#tableModal").show();
+
+  }
+
+  // Helspers end
+  </script>
+  <!-- **************** Script Helpers**************** -->
+
+<script type="text/javascript">
+
+ function isEmpty(obj) {
+    for(var key in obj) {
+        if(obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
+</script>
+
+  <script type="text/javascript">
+  window.onload = getRemoteGerenteData();
+  </script>
+
+
 </body>
 </apex:page>

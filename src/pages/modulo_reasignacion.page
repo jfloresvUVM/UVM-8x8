@@ -1,0 +1,1762 @@
+<apex:page cache="false" controller="ctrl_modulo_reasignacion" doctype="html-5.0" showheader="false" sidebar="false" standardstylesheets="false" applyBodyTag="false" readOnly="true">
+<style>
+
+body {
+  font-weight: 500;
+}
+
+.final_percent {
+  text-align: right;
+  position: absolute;
+  right: 0;
+  margin-right: 65px;
+  font-size: 51px;
+  margin-top: -40px;
+  opacity: 0.7;
+}
+
+.jumbotron.jumbotron-fluid {
+  background-color: white;
+  height: 200px;
+  /* -webkit-box-shadow: 0px 3px 12px 0px rgba(0,0,0,0.46);
+  -moz-box-shadow: 0px 3px 12px 0px rgba(0,0,0,0.46);
+  box-shadow: 0px 3px 12px 0px rgba(0,0,0,0.46); */
+  background-image: url('{!URLFOR($Resource.banners, 'banner_2.jpg')}');
+  background-position: b2m;
+  background-size: cover;
+  margin-bottom: 0;
+}
+h1.display-4 {
+  font-weight: 400;
+}
+
+select.form-control.jumbo-selector {
+  width: 300px;
+  margin-left: 15px;
+}
+
+.buttons-header {
+  right: 0;
+  position: relative;
+  text-align: right;
+  margin-top: -60px;
+}
+
+.jumbo-conainter-content.card {
+  padding-left: 30px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-right: 50px;
+  top: 0;
+  margin-top: -45px;
+}
+
+.csbox {
+  margin-top: -10px!important;
+  margin-left: -5px!important;
+}
+
+.csbox_main{
+  margin-top: -10px!important;
+  margin-left: -5px!important;
+
+}
+
+span.percent_symbol {
+  right: 0;
+  position: absolute;
+  font-size: 52px;
+  opacity: 0.7;
+  margin-top: -40px;
+  margin-right: 26px;
+  font-weight: 800;
+}
+
+
+/* Revision 2 */
+
+.container_custom {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+
+ul.nav.nav-tabs {
+  /* background-color: #cc3937; */
+  /* height: 60px; */
+  padding: 0;
+}
+
+
+/* navs */
+.nav-tabs .nav-item {
+  /* margin-top: 10px; */
+}
+
+/* li.nav-item.active {
+background-color: #b02d2b;
+border-style: solid;
+height: 60px;
+border-width: 1px;
+border-color: #8d1c1b;
+border-left: none;
+border-top: none;
+border-b2m: none;
+-webkit-box-shadow: inset -2px 0px 5px 0px rgba(0,0,0,0.27);
+-moz-box-shadow: inset -2px 0px 5px 0px rgba(0,0,0,0.27);
+box-shadow: inset -2px 0px 5px 0px rgba(0,0,0,0.27);
+} */
+
+li {
+  background-color: #4e5b67;
+  border-radius: 5px;
+  border-bottom: none;
+}
+
+a.nav-link {
+  margin-top: 10px!important;
+}
+
+
+/* navs */
+div#filters {
+  background-color: #ededed;
+border-style: solid;
+border-width: 0.5px;
+border-color: #ededed;
+/* margin: 20px; */
+/* padding: 30px; */
+}
+
+.conainter-fiters {
+  margin: 20px;
+  background-color: white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+transition: all 0.3s
+}
+
+.conainter-fiters:hover {
+  /* box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); */
+}
+
+.form-check, label {
+  font-size: 14px;
+  line-height: 1.42857;
+  color: #555555;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.filter_section {
+  padding: 20px;
+}
+
+button.btn.btn-sm.btn-danger.btn-dessasignar {
+  right: 0;
+  position: absolute;
+  margin-right: 20px;
+  margin-top: -20px;
+  font-size: 11px;
+  width: auto;
+  padding: 5px;
+}
+
+i.fa.fa-times {
+  font-size: 10px!important;
+  margin-right: 5px;
+  margin-top: -12px!important;
+}
+
+input[type="radio"], input[type="checkbox"] {
+  box-sizing: border-box;
+  padding: 0;
+  margin-top: -7px!important;
+}
+
+div#number_alert {
+    z-index: 7;
+    position: fixed;
+    bottom: -15px;
+    width: 100%;
+    left: 0;
+    right: 0;
+    height: 80px;
+}
+
+button.btn.btn-primary.btn_add {
+  width: 95%;
+  margin-top: 40px;
+}
+
+.filter_labels{
+  border-color: #d6d6d6;
+  border-width: 1px;
+  border-style: solid;
+  font-size: 13px;
+  margin: 5px;
+  /* background-color: #d6d5d5; */
+  border-radius: 5px;
+  padding: 5px;
+  -webkit-box-shadow: 0px 3px 19px 0px rgba(0,0,0,0.13);
+  -moz-box-shadow: 0px 3px 19px 0px rgba(0,0,0,0.13);
+  box-shadow: 0px 3px 19px 0px rgba(0,0,0,0.13);
+}
+
+.filter.md-auto {
+  display: contents;
+  /* padding: 10px; */
+}
+
+.row.row_filters {
+  /* margin-left: 15px; */
+  background-color: #f7f7f7;
+  /* width: 80%; */
+  margin-left: auto;
+  margin-right: auto;
+  height: 50px;
+}
+
+button.btn.btn-sm.btn-danger.delete_filter {
+  margin: 0px;
+  padding: 3px;
+  height: 20px;
+  border-radius: 50%;
+  width: 20px;
+  margin-left: 5px;
+}
+
+
+
+button.btn.btn-primary.mx-auto {
+  width: 20%;
+  margin-b2m: 20px;
+  margin-top: 20px;
+}
+
+.filter.mx-auto {
+  display: inline-flex;
+}
+
+span.filtered_label_warning {
+  font-size: 9px;
+  color: black;
+  font-weight: 500;
+  margin-left: 5px;
+}
+
+.card .card-header .card-title {
+  margin-b2m: 3px;
+  font-weight: 500;
+}
+
+p.card-category {
+  font-weight: 600;
+}
+.table thead tr th {
+  font-size: 1.063rem;
+  font-weight: 500;
+}
+
+h5.modal-title {
+  font-weight: 600;
+}
+
+select#filter_valores {
+  height: 100%;
+}
+
+@media only screen and (max-width: 500px) {
+
+  h1.display-4.lead {
+    font-size: 24px;
+  }
+
+  div#filters {
+    margin-top: -25px;
+    /* padding: 30px; */
+    position: absolute;
+    z-index: 5;
+    width: 100%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    webkit-box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.43);
+    -moz-box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.43);
+    box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.43);
+  }
+
+  .col-lg-6.jumbo-conainter-content.card {
+    margin-top: -6px;
+    height: 130px;
+  }
+
+
+  ul.nav.nav-tabs {
+    display: flex;
+    margin-top: -25px;
+    width: 100%!important;
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 4;
+  }
+
+  .nav-tabs .nav-item .nav-link {
+
+    font-size: 11px;
+  }
+
+  .container_custom {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 24px;
+    width: 90%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  li#nav_filtros {
+    position: absolute;
+    left: 0;
+    z-index: 5;
+    top: -181px;
+    text-align: right;
+    width: 100%;
+    background-color: #000000a6;
+    /* height: 20px; */
+    /* -webkit-box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.43); */
+    -moz-box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.43);
+    /* box-shadow: -1px 3px 5px 0px rgba(0,0,0,0.43); */
+  }
+
+  button.btn.btn-primary.btn_add {
+    width: 70px;
+  }
+
+  button.btn.btn-primary.mx-auto {
+    width: 60%;
+    margin-b2m: 20px;
+    margin-top: 20px;
+  }
+
+  .final_percent {
+    text-align: left;
+    position: absolute;
+    left: 0;
+    margin-left: 18px;
+    font-size: 28px;
+    margin-top: 1px;
+    opacity: 1;
+  }
+
+  span.percent_symbol {
+    left: 0;
+    position: absolute;
+    font-size: 25px;
+    opacity: 0.8;
+    margin-top: 2px;
+    margin-left: 65px;
+    font-weight: 800;
+  }
+
+  span#opp_asignar_gerente {
+    font-weight: bold;
+  }
+
+  span.filtered_label_warning {
+    font-size: 14px;
+    color: black;
+    font-weight: 500;
+    margin-left: 5px;
+  }
+
+  button#confirm_button_1 {
+    margin-b2m: 100px;
+    width: 100%;
+  }
+
+  h1.display-4.lead {
+    font-size: 20px;
+  }
+
+  li#nav_equitativo {
+    width: 33%;
+    text-align: center;
+  }
+
+  li#nav_peso {
+    width: 33%;
+    text-align: center;
+  }
+
+  li#nav_desasignar {
+    width: 33%;
+    text-align: center;
+  }
+
+}
+
+/* NEw Filxes */
+
+li {
+  background-color: #8c9eb1;
+  border-radius: 5px;
+  border-bottom: none;
+}
+
+li:hover{
+  background-color: lightslategrey;
+}
+
+li.nav-item.active {
+  background-color: lightslategrey;
+  z-index: 2;
+  -webkit-box-shadow: 7px -2px 14px -6px rgba(0,0,0,0.61);
+  -moz-box-shadow: 7px -2px 14px -6px rgba(0,0,0,0.61);
+  box-shadow: 7px -2px 14px -6px rgba(0,0,0,0.61);
+}
+
+
+
+i.fa.fa-search {
+  font-size: 13px!important;
+  margin-top: -15px!important;
+}
+
+button.btn.btn-danger.mx-auto {
+  font-weight: bold;
+    right: 0;
+    position: absolute;
+    margin-top: 10px;
+    /* margin-right: 15px; */
+    margin-right: 20px!important;
+}
+
+button#confirm_button_1 {
+  font-weight: bold;
+}
+
+i.fa.fa-check {
+  margin-top: -16px!important;
+  font-size: 12px!important;
+}
+
+/* Table */
+
+.table_section {
+  overflow-x: auto;
+}
+
+.table_container {
+    /* padding-left: 20px; */
+    /* padding-right: 20px; */
+    margin-left: 20px;
+    margin-right: 20px;
+    background-color: #f4443a;
+}
+
+table.table.table-sm.table-bordered {
+  background-color: white;
+}
+
+.content {
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 1px;
+  background-color: lightslategray;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 50px;
+}
+
+.nav-tabs .nav-item {
+  margin-bottom: -1px;
+  margin-left: -1px;
+  border-radius: 0px;
+}
+
+.nav_header {
+  margin-top: 10px;
+  padding-left: 21px;
+}
+
+i.fa.fa-table {
+  color: darkgray;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+i.fa.fa-table:hover {
+  color: black;
+  -webkit-transition: 0.5s ease;
+  -moz-transition: 0.5s ease;
+  -o-transition: 0.5s ease;
+  transition: 0.5s ease;
+}
+
+/*  Test Fixes Prev DEsign*/
+
+select#filter_operador {
+    margin-top: 40px;
+}
+
+select#filter_campos {
+    margin-top: 40px;
+}
+
+table#table_1 {
+  margin-top: 50px;
+    margin-left: 5px;
+    margin-right: 50px;
+    overflow-x: scroll;
+    background-color: #e7e7e7;
+
+}
+
+th.th_filter {
+    /* width: 2px!important; */
+    font-size: 12px;
+}
+td.td_filter {
+    font-size: 12px;
+}
+
+
+/* Second Style */
+
+
+
+.content {
+    background-color: transparent;
+    margin-top: -10px;
+}
+
+li {
+    background-color: transparent;
+}
+li:hover {
+    background-color: transparent;
+    /* font-weight: bold!important; */
+}
+
+li.nav-item.active {
+    background-color: transparent;
+    z-index: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border-bottom: black;
+    border-style: solid;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-width: 1px;
+}
+
+.nav-tabs .nav-item .nav-link, .nav-tabs .nav-item .nav-link:hover, .nav-tabs .nav-item .nav-link:focus {
+    border: 0 !important;
+    color: #333 !important;
+    font-weight: 500;
+}
+
+.nav_header {
+    margin-top: 0;
+    margin-left: 30px;
+}
+
+.filter_labels {
+    border-color: #d6d6d6;
+    border-width: 1px;
+    border-style: solid;
+    font-size: 13px;
+    margin: 5px;
+    background-color: white;
+    padding: 5px;
+    webkit-box-shadow: none;
+    moz-box-shadow: none;
+    box-shadow: none;
+    box-shadow: none;
+    font-weight: 400;
+}
+
+
+
+@media only screen and (max-width: 500px){
+
+ul.nav.nav-tabs {
+    margin-top: -10px;
+
+}
+div#filters{
+  margin-top: 0;
+}
+
+.content {
+    background-color: transparent;
+    margin-top: 60px;
+    padding: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+input#main_check {
+    margin-top: 20px!important;
+}
+
+}
+
+/*  Modulo*/
+
+.card-body.table-responsive {
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+.final_percent {
+    text-align: right;
+    position: absolute;
+    right: 0;
+    margin-right: 20px;
+    font-size: 51px;
+    margin-top: -20px;
+    opacity: 0.7;
+}
+span.filtered_label_warning {
+    font-size: 12px;
+    color: #f4443a;
+    font-weight: 500;
+    margin-right: 5px;
+    display: block;
+    margin-top: 5px;
+}
+/* New Section Table Content*/
+
+.page-footer {
+    background: white;
+    position: fixed;
+    width: 100%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-box-shadow: 0px -2px 5px -1px rgba(0,0,0,0.16);
+    -moz-box-shadow: 0px -2px 5px -1px rgba(0,0,0,0.16);
+    box-shadow: 0px -2px 5px -1px rgba(0,0,0,0.16);
+    z-index: 6;
+}
+
+.select-footer {
+    display: flex;
+    text-align: r;
+    margin: 10px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #d8d7d7;
+    background-color: #f5f5f56e;
+}
+
+
+
+.footer-content {
+    display: flex;
+    margin-left: 50px;
+}
+
+.footer-content > p {
+    width: 400px;
+    margin-top: 10px;
+    padding: 0!important;
+}
+
+button#confirm_button_1 {
+    height: 30px!important;
+    width: 100px;
+    font-size: 9px;
+    background-color: red;
+    position: absolute;
+    right: 0;
+    margin-right: 25px;
+    margin-top: 10px;
+}
+
+
+
+</style>
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,400,700" rel="stylesheet"/>
+  <apex:stylesheet value="{!URLFOR($Resource.MD, 'material-dashboard-html-v2.1.0/assets/css/material-dashboard.css?v=2.1.0.css')}" />
+  <apex:stylesheet value="{!URLFOR($Resource.zipCalculadora,'/ZipCalculadora/css/font-awesome.min.css')}"/>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css"/>
+
+
+<style>
+  
+  /*Data Tables*/
+
+table.dataTable thead th, table.dataTable thead td {
+    padding: 10px 18px;
+    border-bottom: 1px solid #d3d3d3;
+}
+table.dataTable thead th, table.dataTable tfoot th {
+    font-weight: bold;
+    color: grey;
+}
+
+table.dataTable.no-footer {
+    border-bottom: 1px solid #d3d3d3;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    color: #333 !important;
+    border: 1px solid #979797;
+    background-color: white;
+    background: none!important;
+    border-color: #d3d3d3!important;
+    background-color: #e9e9e9!important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    color: #3c3c3c !important;
+    border: 1px solid #d3d3d3;
+    background-color: #585858;
+    background: none;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    margin-left: 0.5em;
+    outline: none!important;
+    box-shadow: none;
+    /* border: none; */
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 20px;
+    border-color: #d3d3d3;
+    padding-left: 20px;
+}
+select {
+    margin-left: 5px;
+    margin-right: 5px;
+    border-color: #d3d3d3;
+    padding-left: 5px;
+}
+
+input.form-check-input.csbox {
+    margin-left: 3px!important;
+}
+
+table.dataTable thead .sorting_asc {
+    background: none!important;
+}
+
+button.btn.btn-sm.btn-customm-footer {
+    background-color: red;
+    position: absolute;
+    right: 0;
+    margin-top: 10px;
+    margin-right: 25px;
+}
+
+/* Filters To Table*/
+
+.conainter-fiters {
+     margin: 0px;
+    background-color: white;
+    box-shadow: none;
+    /* transition: all 0.3s; */
+}
+
+.row.row_filters {
+    margin-left: 0px;
+    background-color: #f7f7f7;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto;
+}
+
+.filter.mx-auto {
+    display: inline-table;
+    width: 100%;
+    margin-left: 0px!important;
+    left: 0!important;
+}
+
+button.btn.btn-sm.btn-danger.delete_filter {
+    margin: 0px;
+    padding: 3px;
+    height: 20px;
+    border-radius: 50%;
+    width: 20px;
+    margin-left: 5px;
+    position: absolute;
+    right: 0;
+    margin-right: 1%;
+}
+    
+span.more_results {
+    font-size: 12px;
+    color: red;
+    font-weight: 700;
+    margin-right: 5px;
+}    
+  
+  </style>
+  <!-- Chartist JS -->
+  <title>Modulo de Asignación</title>
+</head>
+
+
+<body>
+
+  <!-- your content here -->
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container_custom">
+      <div class="col-lg-6 jumbo-conainter-content card">
+        <h1 class="display-4 lead" id="header_name"></h1>
+        <p class="lead_sub" id="header_profile"></p>
+        <!-- Filters Content  -->
+        <div class="filters_content">
+          <div class="checkbox_content">
+            <label data-toggle="collapse" data-target="#filters" aria-expanded="false" aria-controls="collapseOne">
+              <input type="checkbox" id="check_filters"/> Mostrar Filtros
+            </label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!--End jumbotron  -->
+
+
+
+  <!-- Filters Sections -->
+  <div class="collapse" id="filters">
+    <div class="conainter-fiters">
+      <div  class="filter_section">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="form-group">
+              <label for="filter1" class="label_filter">Campo:</label>
+              <select class="form-control" id="filter_campos" onChange="campo_change(this.options[this.selectedIndex].value,this.options[this.selectedIndex].id)" > <option>--Seleccione--</option></select>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="form-group">
+              <label for="filter2" class="label_filter">Operador:</label>
+              <select class="form-control" id="filter_operador" ></select>
+            </div>
+          </div>
+
+          <div class="col-lg-3">
+            <div class="form-group">
+              <label for="filter_valores" class="label_filter">Valores:</label>
+              <div id="filter_valores_container">
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-1">
+            <button class="btn btn-danger btn_add" onclick="add_filtro()">
+              <i class="fa fa-plus" aria-hidden="true" ></i></button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row row_filters">
+          <div class="filter mx-auto" id="filter_pills">
+            <!-- PIlls container  -->
+          </div>
+        </div>
+        <div class="row">
+          <button class="btn btn-danger mx-auto" onclick="getRemoteFilteredAgents()"><i class="fa fa-search" aria-hidden="true"></i>
+            Buscar</button>
+          </div>
+        </div>
+
+        <!--Info table section  -->
+
+        <div class="table_section">
+          <div class="table_container">
+            <table class="table table-sm table-bordered" id="table_1">
+
+            </table>
+          </div>
+        </div>
+
+        <!-- End info table section  -->
+
+        <!-- Beforce Collapse -->
+      </div>
+      <!-- end Filters Sections -->
+
+
+      <div class="content">
+      
+        <div class="col-lg-12 col-md-12">
+          
+          <div class="card ">
+            <div class="card-header">
+              <h4 class="card-title">Opportunidades para asignar </h4>
+              <!-- <p class="card-category">Seleccione un porcentaje</p> -->
+              <span class='final_percent' id="opp_asignar_gerente"></span>
+            </div>
+            <div class="card-body table-responsive">
+              
+                <div class="opp_table">
+                    <table id="table_opportunity" class="table table-sm table-bordered">
+                    <thead>
+                      <tr>
+                        <th><input  type="checkbox" class="form-check-input csbox_main" id="main_check" onClick="fill_all_checks(this.id)"/></th>
+                        <th>ID</th>
+                        <th>Owner</th>
+                        <th>Periodo</th>
+                        <th>Año</th>
+                        <th>Contacto</th>
+                        <th>Estatus</th>
+                        <th>Tipificacion</th>
+                        <th>Programa de Interes</th>
+                      </tr>
+                      </thead>
+                      <tbody id="table_body">
+
+                      </tbody>
+                    </table>
+                   </div>
+            </div>
+          </div>
+
+          <div class="page-footer">
+            <div class="select-footer">
+              <div class="footer-content">                
+                <p>Seleccione un Agente:</p>
+                <select class="form-control select_card" name="" id="data-table"></select>
+              </div>
+                <button type="button" class="btn btn-sm btn-customm-footer" onclick="show_modal('myModal')"><i class="fa fa-check" aria-hidden="true"></i> Confirmar</button>
+
+            </div>
+          </div>
+
+
+          <div class="modal" tabindex="-1" role="dialog" id="myModal">
+
+            <div class="modal-dialog" role="document" >
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">¿Esta seguro?</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="close_modal('myModal')">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Esta seguro que desea aplicar los cambios?.</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-success" onclick="sendOpps()"><i class="fa fa-check" aria-hidden="true"></i> Confirmar</button>
+                  <button type="button" class="btn btn-danger" onclick="close_modal('myModal')"><i class="fa fa-times" aria-hidden="true"></i> Cerrar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading modal -->
+
+          <div class="modal" id="loadingModal" tabindex="-1" data-backdrop="static" keyboard ="false" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+              <div class="modal-body">
+                <img src="https://cdn.cssauthor.com/wp-content/uploads/2018/06/Animated-Loading-%C3%97-1.gif" class="img_loading" />
+              </div>
+              <div class="modal-footer">
+                <h3>Cargando...</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Alert -->
+        <div class="alert alert-danger" role="alert" id="number_alert"></div>
+        <!-- Alert -->
+        <!-- Content Ends -->
+
+      </div>
+      <!--End Table  -->
+
+    </div>
+
+<!--   Core JS Files   -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+
+<script type="text/javascript">
+// Globals
+
+var isFiltered = false;         //Booleano para sabes si existe algun filtro.
+var filter_campo_txt;           //Variable para gurdar campo filtrado
+var filter_operador_txt;        //Varuable para guardara operador filtrado.
+var filter_valores_txt;         //Variable para guardar valores filtrados
+var filter_count=0;             //Almacena la cantidad de filtros
+var filter_position=0;          //Almacena la Posicion de Filtros
+var filter_opp_gerente=0;       //Variable de Oportunidades Filtradas del Gerente (Backup de Opps de Gerente).
+
+var mapaResultados=[];          //Arreglo para guardar el mapa de Resultados.
+var mapaOperadores=[];          //Arreglo para guardar el mapa de Operadores.
+var mapaValores=[];             //Arreglo para guardar el mapa de Valores.
+var mapaCampos=[];              //Arreglo para guardar el mapa de Campos.
+var seleccionados=[];           //Arreglo para guardar las Oportuniades Seleccionadas
+
+var opp_gerente =0;             //Oportunidades del gerente
+var local_opp_gerente;          //Oportunidades independientes del gerente (para cada funcion)
+var obj_size =0;                //Tamaño del objeto
+var obj_size_active = 0;        //Tamañp del objecto con estado activo
+
+var profile_name;               //NOmbre del Perfil
+var territory_ext;              //Variable para almacnear el id del territroio.
+var territory_name;             //Variable para almacenar el nombre del territorio.
+var campus_ext;                 //Variable para guardar el id del campus.
+var username;                   //Variable para guardar el nombre del angente.
+
+var queryString_to_add="";      //Variable para almacenar el query filtrado den texto.
+var gerenteId = "";             //Variable para guardar el id del gerente.
+var oportunidades_totales = {}; //Variable para guardar las oportuniades de la tabla.
+
+//Se inicializa el plugin de DATA_TABLE
+var table = $('#table_opportunity').DataTable();
+
+Visualforce.remoting.timeout = 240000; // Set timeout at page level
+
+
+// Globals
+</script>
+
+<script type="text/javascript">
+
+function obtenerMapaCampos(){
+
+  console.log("Entro Get Campos");
+  $("#errorModal").show();
+
+  var selector_campos = document.getElementById("filter_campos");
+
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.ctrl_modulo_reasignacion.obtenerMapaOperadores}',
+    function(result, event){
+
+      if (event.status) {
+
+        mapaResultados = result;
+
+        for(var key in mapaResultados){
+          //a la lista de campos se agrega cada elemento de la respuesta
+          console.log(mapaResultados[key]);
+
+          $("#filter_campos").append(
+
+            "<option id='"+mapaResultados[key].campo+"' value='"+mapaResultados[key].tipo+"'>"+mapaResultados[key].label+"</option>"
+          );
+
+        }
+
+      } else if (event.type === 'exception') {
+        console.log(event.messsage);
+      }
+    }
+  );
+
+}
+
+
+function obtenerMapaOperadores(){
+
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.ctrl_modulo_reasignacion.pruebaOperadores}',
+    function(result, event){
+
+      if (event.status) {
+
+        console.log(result);
+
+        mapaOperadores = result;
+
+      } else if (event.type === 'exception') {
+        console.log(event.messsage);
+      }
+    }
+  );
+
+}
+
+function obtenerMapaValores(){
+
+  Visualforce.remoting.Manager.invokeAction(
+    '{!$RemoteAction.ctrl_modulo_reasignacion.obtenerListadoDeValores}',
+    function(result, event){
+
+      if (event.status) {
+
+        console.log(result);
+        mapaValores = result;
+
+      } else if (event.type === 'exception') {
+        console.log(event.messsage);
+
+      }
+    }
+  );
+
+}
+
+function query_to_add(p_campo,p_operador,p_valor){
+
+  var filtro = {
+    campo:p_campo,        //valor del campo
+    operador:p_operador,  //valor del operador
+    valor:p_valor,        //valores seleccionados
+    editar:false          //variable que dicta si se puede editar el filtro o no
+  }
+  //se agrega el filtro a la lista
+  seleccionados.push(filtro);
+  console.log("Seleccionados--->");
+  console.log(JSON.stringify(seleccionados));
+
+}
+
+</script>
+
+
+<script type="text/javascript">
+
+function add_filtro(){
+
+  console.log("Entro Filtro");
+
+  var f_campos = $("#filter_campos option:selected").text();
+  var f_operador = $("#filter_operador option:selected").text();
+  var f_valores = $("#filter_valores").val();
+  console.log("F_campos"+f_campos);
+
+  var f_random = Math.floor((Math.random() * 100) + 1);
+
+  hide_alert();
+
+       if (  f_campos == "--Seleccione--"){show_alert("Seleccione un Campo.");}
+  else if ( f_operador == "--Seleccione--"){show_alert("Seleccione un Operador.");}
+  else if ( f_valores == "--Seleccione--"){show_alert("Seleccione un Valor.");}
+  else {
+
+      // if(f_campos == "Año de Ciclo"){
+        var id_campos = f_campos.split(' ').join('_');
+        // f_campos = f_campos.split(' ').join('_');
+
+      // }
+
+    $("#filter_pills").append(
+      "<tr id='"+id_campos+f_random+"'><th><div class='filter_labels'>"+f_campos+" "+f_operador+" "+f_valores+"<button  onclick='deleteFilter(\""+f_campos+f_random+"\",\""+filter_position+"\")' class='btn btn-sm btn-danger delete_filter align-top'> X</button></div></th></tr>");
+
+      filter_count = filter_count +1;
+      filter_position = filter_position +1;
+      console.log(f_valores[0]);
+
+      var selectobject=document.getElementById("filter_campos");
+      console.log("Selected Object:"+selectobject);
+
+      for (var i=0; i<selectobject.length; i++){
+
+        console.log("otptions:v"+selectobject.options[i]);
+
+        if (selectobject.options[i].text == f_campos.split('_').join(' ') ){
+
+        selectobject.remove(i);
+
+        }
+      }
+
+    $('#filter_campos').val(selectobject.options[0].value).change();
+
+    var obj_campos={}
+    var obj_operador={}
+    var obj_valores={}
+
+
+      for(var key in mapaResultados){
+
+        if (mapaResultados[key].label  == f_campos){
+
+          api_campos = mapaResultados[key].campo;
+          console.log("api_campus: "+api_campos);
+          obj_campos["n"] = mapaResultados[key].campo;
+          obj_campos["name"] = mapaResultados[key].label;
+          obj_campos["tipo"] = (mapaResultados[key].tipo).toUpperCase();
+          // ---->
+          obj_operador["name"] = f_operador;
+
+          if (f_valores.length >1){
+
+            var valores_concat='';
+
+            for (var i = 0; i < f_valores.length; i++) {
+              // valores_concat = "'"+f_valores[i]+"'";
+              if (i == f_valores.length-1){
+
+                valores_concat = valores_concat+"'"+f_valores[i]+"'";
+                
+              }else{
+                valores_concat = valores_concat+"'"+f_valores[i]+"'"+",";
+              }
+
+            }
+            obj_valores["name"] =valores_concat;
+
+            console.log('Valores_concat'+valores_concat);
+          }else{
+            obj_valores["name"] = "'"+f_valores[0]+"'";
+          }
+
+          console.log("obj-->Campos");
+          console.log(obj_campos);
+
+
+        }
+      }
+
+      query_to_add(obj_campos,obj_operador,obj_valores);
+
+    }
+
+  }
+
+  function deleteFilter(id,posicion){
+
+    console.log("Antes Delete:"+JSON.stringify(seleccionados));
+    // seleccionados.splice(posicion, 1);
+    var campo_string = id.replace(/[0-9]/g, '');
+
+    for (var i = 0; i < seleccionados.length; i++) {
+
+      if(seleccionados[i].campo.name == campo_string){
+        seleccionados.splice(i, 1);
+      }
+
+    };
+
+    console.log("Despues Delete:"+JSON.stringify(seleccionados));
+
+
+    var field_id = "#"+id.split(' ').join('_');
+    console.log("FieldIdToRemove:"+field_id);
+    
+    $(field_id).remove();
+
+    for(var key in mapaResultados){
+
+      console.log("campo_string: "+campo_string);
+      if(mapaResultados[key].label == campo_string){
+
+        $("#filter_campos").append(
+          "<option id='"+mapaResultados[key].campo+"' value='"+mapaResultados[key].tipo+"'>"+mapaResultados[key].label+"</option>"
+        );
+      }
+    }
+
+
+    if(seleccionados.length == 0 ){
+
+      console.log("No existen filtros");
+      hide_alert();
+      isFiltered = false;
+      queryString_to_add = '';
+      get_opps(queryString_to_add);
+
+
+      if (filter_opp_gerente != 0) {
+
+        opp_gerente = filter_opp_gerente;
+        console.log("No existen filtros: "+opp_gerente+ "filter_backup: "+filter_opp_gerente);
+        $("#opp_asignar_gerente").text(opp_gerente);
+
+      }
+
+    }
+
+  }
+
+  </script>
+
+  <script type="text/javascript">
+  function getRemoteFilteredAgents() {
+
+    console.log("Filtered OPPS");
+    console.log(JSON.stringify(seleccionados));
+    console.log("opp_gerente on filtered: "+opp_gerente);
+
+    if(seleccionados.length > 0){
+
+      hide_alert();
+      var data = htmlDecode(campus_ext);
+      console.log("data:"+data);
+      Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ctrl_modulo_reasignacion.obtenerGerenteOppFiltradas}',JSON.stringify(seleccionados),data,
+        function(result, event){
+          if (event.status) {
+
+            console.log("REMOTE FILTERED: "+result +"opps_gerente: "+opp_gerente);
+            if(result){
+              console.log("Filtered Opps");
+
+              if(result[1] >= 1){
+
+                filter_opp_gerente = opp_gerente;
+                console.log("Filter_backup_gerente:"+filter_opp_gerente);
+                opp_gerente = parseInt(result[1]);
+                $("#opp_asignar_gerente").text(opp_gerente);
+                $("#opp_asignar_gerente").append("<span class='filtered_label_warning'>(filtradas)</span>");
+
+                isFiltered = true;
+                queryString_to_add = htmlDecode(result[0]);
+
+                get_opps(queryString_to_add);
+
+
+              }else {
+
+                isFiltered = false;
+                queryString_to_add='';
+                show_alert("No se encontraon coincidencias");
+                table.clear().destroy();
+                table = $('#table_opportunity').DataTable();
+                table.draw();
+                $("#opp_asignar_gerente").text("0");
+              }
+              console.log(result);
+
+            }
+
+          } else if (event.type === 'exception') {
+            console.log(event.messsage);
+            show_alert("No se encontraon coincidencias");
+            table.clear().destroy();
+            table = $('#table_opportunity').DataTable();
+            table.draw();
+            $("#opp_asignar_gerente").text("0");
+          }
+        }
+      );
+    }else{
+      show_alert("Debe elegir al menos un filtro");
+    }
+  }
+  </script>
+
+  <script type="text/javascript">
+
+
+  function campo_change(selectObject,idObject){
+    var tipo = selectObject.toUpperCase();
+    console.log("tipo: "+tipo +" id:"+idObject);
+
+    $("#filter_operador").empty();
+    $("#filter_valores").empty();
+
+    if(tipo == "STRING"){
+      $("#filter_valores_container").empty();
+      $("#filter_valores_container").append("<input class='form-control' id='filter_valores' ></input>");
+
+    }else {
+      $("#filter_valores_container").empty();
+      $("#filter_valores_container").append("<select multiple class='form-control' id='filter_valores' ></select>");
+    }
+
+    for(var key in mapaOperadores){
+
+      if (mapaOperadores[key].tipo == tipo){
+
+        for (var i = 0; i < mapaOperadores[key].valores.length; i++) {
+          console.log(mapaOperadores[key].valores[i].name);
+          $("#filter_operador").append("<option>"+mapaOperadores[key].valores[i].name+"</option>");
+        }
+        // $("#filter_operador").append("<option><option>")
+      }
+    }
+
+    for(var key in mapaValores){
+
+      console.log("Key:Valoresd: "+key);
+      if (key  == idObject){
+
+        var valores = mapaValores[key];
+
+        var array = new Array();
+
+        array = valores.toString().split(',');
+        //console.log("Valore: "+array );
+        $("#filter_valores").append("<option>--Seleccione--</option>");
+
+        for (var i = 0; i < array.length; i++) {
+          $("#filter_valores").append("<option value='"+array[i]+"'>"+array[i]+"</option>");
+        }
+      }
+    }
+
+  }
+
+
+
+  </script>
+
+  <script type="text/javascript">
+
+  function sendOpps(){
+      
+    close_modal("myModal");
+    show_modal('loadingModal');
+
+    //Arreglo para obternet todos los inputs.
+    var inputElements = document.getElementsByClassName('csbox');
+      //Arreglo de id's
+      var ids =[];
+
+    for(var i=0; inputElements[i]; ++i){
+      
+      if(inputElements[i].checked){
+        // ids.push(obj);
+        console.log(oportunidades_totales[i]["Id"]);
+        var obj = {};
+        //Se obtienen los id se los agentes
+        obj["id"] = oportunidades_totales[i]["Id"];
+        //Se agregan al arreglo.
+        ids.push(obj);
+
+      }//end if
+    }//end for
+
+    if(ids.length > 0){
+      var myJSON = JSON.stringify(ids);
+
+      console.log(myJSON);
+      var id_agente = $( "#data-table" ).val();
+      var c_ext = htmlDecode(campus_ext);
+
+      console.log("id_agente: "+id_agente);
+      Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ctrl_modulo_reasignacion.updateGerenteOpps}',id_agente,myJSON,
+        function(result, event){
+          if (event.status) {
+            //Se agrega las opciones al selector.
+            console.log("desassingados: "+result);
+            if(result[0] == "true"){
+              $('#loadingModal').modal('hide');
+              location.reload();
+            }
+            if(result[0] == "false"){
+              close_modal('loadingModal');
+              show_alert(result[1]);
+            }
+
+          } else if (event.type === 'exception') {
+            console.log(event.messsage)
+
+          }
+        }//fin del funcion
+      );
+    }else{
+      close_modal('loadingModal');
+      show_alert("Seleccione al menos (1) Oportunidad");
+    }
+
+
+  }//fin del metodo.
+
+  </script>
+
+
+  <script type="text/javascript">
+    function get_Agentes(ext){
+
+      var data = htmlDecode(ext);
+
+      Visualforce.remoting.Manager.invokeAction(
+        '{!$RemoteAction.ctrl_modulo_reasignacion.obtenerAgentes}',data,
+        function(result, event){
+          if (event.status) {
+            //Se agrega las opciones al selector.
+            if(!isEmpty(result)){
+              console.log(result);
+              // console.log(result[i]);
+              for (var i = 0; i < result.length; i++) {
+                // result[i]
+                if(result[i]["name"] != username && result[i]["name"] != null ){
+                  $("#data-table").append("<option value='"+result[i]["id"]+"'>"+result[i]["name"]+"</option>");
+                }
+              }
+              get_opps(queryString_to_add);
+            }else{show_alert("No se encontraron Agentes.");}
+          } else if (event.type === 'exception') {
+            console.log(event.messsage);
+
+          }
+        }
+      );
+
+    }
+  </script>
+
+<script type="text/javascript">
+  function get_oppGerente(){
+
+    Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ctrl_modulo_reasignacion.get_visibilidadCampus}',
+      function(result, event){
+        if (event.status) {
+          //Se agrega las opciones al selector.
+          if(!isEmpty(result)){
+            console.log(result);
+            hide_alert();
+            opp_gerente = result["oppCount"];
+            profile_name = result["profile_name"];
+            territory_ext = result["territory_ext"];
+            campus_ext = result["campus_ext"];
+            territory_name = result["territory_name"];
+            username = result["username"];
+            $("#header_name").text(username);
+            $("#header_profile").text(profile_name);
+            $("#opp_asignar_gerente").text(opp_gerente);
+
+            if (opp_gerente == 0) {
+              $("#confirm_button_1").attr('disabled', 'disabled');
+              $(".checkbox_content").remove();
+              show_alert("No Cuenta con Oportunidades para Asignar");
+            }
+
+            get_Agentes(territory_ext);
+          }else{ show_alert("Error al encontrar datos del Gerente.");}
+        } else if (event.type === 'exception') {
+          console.log(event.messsage);
+
+        }
+      }
+    );
+
+  }
+</script>
+
+
+<script>
+
+function get_opps(q){
+
+    var limite = 2000;
+    var page = 0;
+    var elements_q =200;
+    var data_row ='';
+    var data = htmlDecode(campus_ext);
+        show_modal('loadingModal');
+        console.log("get_TableOpps:");
+        console.log("Data:"+data+" Query:"+q);
+        
+    
+    Visualforce.remoting.Manager.invokeAction(
+      '{!$RemoteAction.ctrl_modulo_reasignacion.get_tableOpps}',data,q,
+      function(result, event){
+        if (event.status) {
+          //Se agrega las opciones al selector.
+          if(!isEmpty(result)){
+            console.log(result);
+            oportunidades_totales = result;
+            table.clear().destroy();
+            
+
+             for( var i =0; i< oportunidades_totales.length; i++){
+              data_row = '';
+              data_row = data_row + "<td><input type='checkbox' class='form-check-input csbox' value ='"+i+"'></td>";
+              data_row = data_row + "<td>"+oportunidades_totales[i]["ID_Salesforce__c"]+"</td>";
+              if ( "Owner" in oportunidades_totales[i]){
+                data_row = data_row + "<td>"+oportunidades_totales[i]["Owner"]["Name"]+"</td>";
+              }
+              else{
+                data_row = data_row + "<td>"+oportunidades_totales[i]["OwnerId"]+"</td>";
+              }
+              data_row = data_row + "<td>"+oportunidades_totales[i]["Periodo__c"]+"</td>";
+              data_row = data_row + "<td>"+oportunidades_totales[i]["Ano_ciclo__c"]+"</td>";
+
+              if ( "Contacto__r" in oportunidades_totales[i]){
+                data_row = data_row + "<td>"+oportunidades_totales[i]["Contacto__r"]["Name"]+"</td>";
+              }
+              else{
+                data_row = data_row + "<td>"+oportunidades_totales[i]["Contacto__c"]+"</td>";
+              }
+
+              data_row = data_row + "<td>"+oportunidades_totales[i]["Estatus__c"]+"</td>";
+              if ("Tipificaci_n__c" in oportunidades_totales[i]){
+                data_row = data_row + "<td>"+oportunidades_totales[i]["Tipificaci_n__c"]+"</td>";
+              }else{
+                data_row = data_row + "<td> - </td>";
+              }
+
+              if ("Programa_de_Inter_s__r" in oportunidades_totales[i]){
+                data_row = data_row + "<td>"+oportunidades_totales[i]["Programa_de_Inter_s__r"]["Name"]+"</td>";
+              }
+              else{
+                data_row = data_row + "<td> - </td>";
+              }
+
+              $("#table_body").append("<tr>"+data_row+"</tr>");
+
+            }  
+          
+            // $("#table_opportunity").append("</tbody>");
+            reset_dataTable();
+     
+             if(!isFiltered){
+                 if(oportunidades_totales.length >= 2000){
+                     $("#opp_asignar_gerente").empty();
+                    $("#opp_asignar_gerente").append("<span class='more_results'>(más de)</span>"+oportunidades_totales.length);
+                 }else{
+                   $("#opp_asignar_gerente").text(oportunidades_totales.length);
+                 }
+             }
+              close_modal("loadingModal");
+            // table.draw();
+          }
+           
+        } else if (event.type === 'exception') {
+          console.log(event.messsage);
+
+        }
+      }
+    );
+
+}
+
+</script>
+
+  <script type="text/javascript">
+  // Helpers Scripts
+  function show_alert(message){
+    //funcion que muestra una alerta depenedien
+    $("#number_alert").text(message);
+    $("#number_alert").show(message);
+    $("#confirm_button_1").attr('disabled', 'disabled');
+
+  }
+
+  function hide_alert(){
+    //funcion para esconder la alreta
+    $("#number_alert").hide();
+    $("#confirm_button_1").removeAttr('disabled', 'disabled');
+
+  }
+
+
+  function close_modal(id){
+
+    var select = "#"+id;
+    $(select).hide();
+    hide_alert();
+  }
+
+  function show_modal(id){
+    var select = "#"+id;
+    $(select).show();
+
+  }
+
+  function show_collapse(id){
+
+  }
+
+  function isEmpty(obj) {
+     for(var key in obj) {
+         if(obj.hasOwnProperty(key))
+             return false;
+     }
+     return true;
+ }
+
+ function htmlDecode(value) {
+   return $("<textarea/>").html(value).text();
+ }
+
+   function fill_all_checks(id){
+    //metodos para llenar los agents con checkboxes
+    var checkedValue = document.getElementById(id);
+    var inputElements = document.getElementsByClassName('csbox');
+    if(checkedValue.checked == true){
+      for(var i=0; inputElements[i]; ++i){
+        inputElements[i].checked=true;
+      }
+    }
+    if(checkedValue.checked == false){
+      for(var i=0; inputElements[i]; ++i){
+        inputElements[i].checked=false;
+      }
+    }
+  }
+
+function reset_dataTable(){
+
+          table= $('#table_opportunity').DataTable({
+                "lengthMenu": [ 50, 100, 200, 500],
+                "language": { 
+
+                  "sProcessing":     "Procesando...",
+                  "sLengthMenu":     "Mostrar _MENU_ registros",
+                  "sZeroRecords":    "No se encontraron resultados",
+                  "sEmptyTable":     "Ningún dato disponible en esta tabla",
+                  "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                  "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                  "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                  "sInfoPostFix":    "",
+                  "sSearch":         "Buscar:",
+                  "sUrl":            "",
+                  "sInfoThousands":  ",",
+                  "sLoadingRecords": "Cargando...",
+                  "oPaginate": {
+                      "sFirst":    "Primero",
+                      "sLast":     "Último",
+                      "sNext":     "Siguiente",
+                      "sPrevious": "Anterior"
+                  },
+                  "oAria": {
+                      "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                      "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                  }
+                }
+              });
+}
+  // Helpers Scripts
+  </script>
+
+  <script type="text/javascript">
+  function init_values(){
+
+
+    obtenerMapaCampos();
+    obtenerMapaOperadores();
+    obtenerMapaValores();
+    get_oppGerente();
+ 
+  }
+  </script>
+
+
+
+  <script type="text/javascript">
+  window.onload = init_values();
+  </script>
+
+
+</body>
+</apex:page>
